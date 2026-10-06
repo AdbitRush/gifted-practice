@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<title>הרפתקת החשיבה 🌟 תרגול למבחן המחוננים</title>
+<style>
+:root{
+  --ink:#3A2E5C; --muted:#8B7FA8;
+  --pink:#FF6B9D; --pink-d:#E14E82;
+  --orange:#FF9A3D; --orange-d:#E57F1F;
+  --purple:#8B5CF6; --purple-d:#6D3FD4;
+  --teal:#2EC4B6; --teal-d:#1FA598;
+  --green:#34C759; --green-d:#1F9D44;
+  --red:#FF5C7A; --amber:#FFC93D;
+  --radius:26px;
+  --shadow:0 10px 30px rgba(139,92,246,.14);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:'Rubik','Segoe UI',Arial,sans-serif; color:var(--ink);
+  min-height:100vh; display:flex; justify-content:center;
+  background:linear-gradient(160deg,#FFF0F5 0%,#F6EDFF 45%,#FFF8E9 100%);
+  background-attachment:fixed; overflow-x:hidden;
+}
+body::before,body::after{
+  position:fixed; z-index:0; pointer-events:none; opacity:.55;
+  font-size:26px; animation:drift 9s ease-in-out infinite;
+}
+body::before{content:"\2728 \1F31F"; top:7%; left:5%;}
+body::after{content:"\1F4AB \2B50"; bottom:9%; right:6%; animation-delay:-4.5s;}
+@keyframes drift{0%,100%{transform:translateY(0) rotate(-8deg);}50%{transform:translateY(-18px) rotate(8deg);}}
+.ltr{direction:ltr;unicode-bidi:isolate;display:inline-block;}
+#app{width:100%;max-width:480px;min-height:100vh;padding:18px 14px 44px;position:relative;z-index:1;}
+.screen{display:none;animation:fadeUp .3s ease;}
+.screen.active{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
+.card{background:rgba(255,255,255,.94);border-radius:var(--radius);box-shadow:var(--shadow);
+  padding:24px 20px;margin-bottom:16px;position:relative;overflow:hidden;}
+.card::before{content:"";position:absolute;top:0;right:0;left:0;height:6px;
+  background:linear-gradient(90deg,var(--pink),var(--orange),var(--purple),var(--teal));}
+.center{text-align:center;}
+.mascot{font-size:60px;line-height:1.2;margin-bottom:8px;animation:floaty 3s ease-in-out infinite;display:inline-block;}
+@keyframes floaty{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+h1{font-size:32px;margin:8px 0 6px;font-weight:900;
+  background:linear-gradient(90deg,var(--pink),var(--purple));-webkit-background-clip:text;background-clip:text;color:transparent;}
+h2{font-size:23px;margin:6px 0 10px;color:var(--ink);font-weight:800;}
+.sub{color:var(--muted);font-size:15px;line-height:1.7;}
+.btn{display:block;width:100%;border:none;cursor:pointer;font-family:inherit;
+  font-size:19px;font-weight:800;border-radius:20px;padding:16px 12px;margin:10px 0;
+  transition:transform .1s ease,box-shadow .15s ease,filter .15s;}
+.btn:active{transform:scale(.96);}
+.btn-primary{background:linear-gradient(135deg,var(--pink),var(--orange));color:#fff;
+  box-shadow:0 6px 0 var(--pink-d),0 12px 24px rgba(255,107,157,.35);}
+.btn-primary:active{box-shadow:0 2px 0 var(--pink-d);transform:translateY(3px) scale(.98);}
+.btn-navy{background:linear-gradient(135deg,#4C3A8C,#2E2358);color:#fff;box-shadow:0 6px 0 #241B45;}
+.btn-teal{background:linear-gradient(135deg,#34D8C7,var(--teal));color:#fff;box-shadow:0 6px 0 var(--teal-d);}
+.btn-ghost{background:#fff;color:var(--ink);border:2.5px solid #EDE4FB;box-shadow:0 3px 10px rgba(139,92,246,.08);}
+.btn-big{font-size:22px;padding:20px 12px;}
+.pill{display:inline-block;background:linear-gradient(135deg,#FFF0F5,#F6EDFF);border:2px solid #F5C9DC;color:#B23A6B;
+  border-radius:999px;padding:7px 15px;font-size:14px;font-weight:700;margin:3px;}
+.mode-row{display:flex;gap:12px;margin:14px 0;}
+.mode-card{flex:1;background:#fff;border:3px solid #EFE7FB;border-radius:20px;padding:18px 8px;
+  text-align:center;cursor:pointer;font-weight:800;font-size:16px;transition:all .18s;}
+.mode-card .em{font-size:36px;display:block;margin-bottom:8px;transition:transform .18s;}
+.mode-card.sel{border-color:var(--pink);background:linear-gradient(180deg,#FFF5F9,#fff);
+  box-shadow:0 8px 22px rgba(255,107,157,.25);transform:translateY(-2px);}
+.mode-card.sel .em{transform:scale(1.15);}
+.inp{width:100%;font-family:inherit;font-size:18px;border-radius:16px;border:2.5px solid #EDE4FB;
+  padding:14px;margin:8px 0;text-align:center;background:#FCFAFF;color:var(--ink);}
+.inp:focus{outline:none;border-color:var(--pink);box-shadow:0 0 0 4px rgba(255,107,157,.15);}
+.tgl-row{display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,#F0FAF9,#F6EDFF);
+  border:2px solid #D9F2EE;border-radius:16px;padding:12px 16px;margin:10px 0;font-weight:700;}
+.switch{position:relative;width:60px;height:34px;flex:none;}
+.switch input{opacity:0;width:0;height:0;}
+.slider{position:absolute;inset:0;background:#D8CDEB;border-radius:999px;transition:.2s;cursor:pointer;}
+.slider:before{content:"";position:absolute;width:26px;height:26px;border-radius:50%;
+  background:#fff;top:4px;right:4px;transition:.2s;box-shadow:0 2px 6px rgba(0,0,0,.2);}
+.switch input:checked + .slider{background:linear-gradient(135deg,var(--teal),#5EEAD4);}
+.switch input:checked + .slider:before{transform:translateX(-26px);}
+.topic-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.topic-card.off{opacity:.45;filter:grayscale(.7);}
+.count-row{display:flex;gap:10px;margin:6px 0 4px;}
+.count-btn{flex:1;padding:13px 4px;border:3px solid #EFE7FB;background:#fff;border-radius:16px;font-size:18px;font-weight:800;color:var(--navy);cursor:pointer;}
+.count-btn.sel{border-color:var(--pink);background:linear-gradient(180deg,#FFF5F9,#fff);}
+.topic-card{background:#fff;border:3px solid #EFE7FB;border-radius:20px;padding:20px 8px;
+  text-align:center;cursor:pointer;transition:all .15s;}
+.topic-card:active{transform:scale(.95);}
+.topic-card .em{font-size:42px;filter:drop-shadow(0 4px 6px rgba(139,92,246,.25));}
+.topic-card .t{font-weight:800;font-size:16px;margin:8px 0 4px;}
+.topic-card .s{color:#F5A623;font-size:15px;letter-spacing:2px;}
+.quiz-top{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.timer-wrap{position:relative;width:68px;height:68px;flex:none;filter:drop-shadow(0 4px 8px rgba(139,92,246,.2));}
+.timer-wrap svg{transform:rotate(-90deg);}
+.timer-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;}
+.qmeta{flex:1;}
+.qcount{font-weight:800;font-size:16px;color:var(--ink);}
+.qtag{display:inline-block;font-size:13px;font-weight:700;color:#0F766E;background:linear-gradient(135deg,#D9F7F3,#E9FBF8);
+  border-radius:999px;padding:4px 13px;margin-top:5px;}
+.bar{height:12px;background:#F1E8FA;border-radius:999px;overflow:hidden;margin:10px 0 16px;
+  box-shadow:inset 0 2px 4px rgba(0,0,0,.06);}
+.bar > div{height:100%;background:linear-gradient(90deg,var(--pink),var(--orange),var(--amber),var(--teal));
+  border-radius:999px;transition:width .35s ease;}
+.qtext{font-size:22px;font-weight:800;line-height:1.75;margin:8px 0 16px;color:var(--ink);}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.ans{background:#fff;border:3px solid #EFE7FB;border-radius:20px;min-height:80px;
+  font-family:inherit;font-size:18px;font-weight:700;color:var(--ink);cursor:pointer;
+  padding:12px 8px;display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:transform .1s,border .15s,background .15s,box-shadow .15s;box-shadow:0 3px 10px rgba(139,92,246,.07);}
+.ans:active{transform:scale(.95);}
+.ans .ltr-badge{background:linear-gradient(135deg,var(--purple),#B388FF);color:#fff;font-weight:800;border-radius:12px;
+  width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;flex:none;font-size:17px;}
+.ans.correct{background:#E9FBEF;border-color:var(--green);box-shadow:0 0 0 4px rgba(52,199,89,.2);animation:pop .35s;}
+.ans.wrong{background:#FFEDF1;border-color:var(--red);animation:shake .4s;}
+.ans.reveal{background:#E9FBEF;border-color:var(--green);box-shadow:0 0 0 4px rgba(52,199,89,.2);}
+.ans:disabled{cursor:default;}
+.ans.dim{opacity:.5;}
+@keyframes pop{0%{transform:scale(1);}40%{transform:scale(1.07) rotate(-1deg);}70%{transform:scale(.98);}100%{transform:scale(1);}}
+@keyframes shake{20%,60%{transform:translateX(-7px);}40%,80%{transform:translateX(7px);}}
+.quiz-tools{display:flex;gap:10px;margin-top:12px;}
+.tool-btn{flex:1;border:2.5px dashed #E3B7CB;background:#FFF7FA;border-radius:16px;
+  padding:13px 6px;font-family:inherit;font-size:15px;font-weight:800;color:#B23A6B;cursor:pointer;transition:transform .1s;}
+.tool-btn:active{transform:scale(.95);}
+.tool-btn.armed{background:#FFE8EE;border-color:#E91E63;color:#C2185B;}
+#hint-box{display:none;background:linear-gradient(135deg,#FFF9E0,#FFF3C9);border:2px solid var(--amber);border-radius:16px;
+  padding:13px 15px;margin-top:12px;font-size:15px;line-height:1.75;animation:fadeUp .25s;}
+#hint-box b{color:#9A6B00;}
+#feedback{display:none;border-radius:20px;padding:17px;margin-top:14px;animation:fadeUp .3s;}
+#feedback.good{background:#E9FBEF;border:2.5px solid var(--green);box-shadow:0 6px 18px rgba(52,199,89,.18);}
+#feedback.bad{background:#FFF6E8;border:2.5px solid var(--amber);box-shadow:0 6px 18px rgba(255,201,61,.2);}
+#feedback .fb-title{font-size:20px;font-weight:800;margin-bottom:6px;}
+#feedback.good .fb-title{color:#1F9D44;}
+#feedback.bad .fb-title{color:#9A6B00;}
+#feedback .fb-text{font-size:15.5px;line-height:1.75;}
+.guess-line{text-align:center;color:var(--muted);font-size:14px;margin-top:12px;font-weight:600;}
+.skip-item{display:flex;align-items:center;justify-content:space-between;background:#fff;
+  border:2.5px solid #EFE7FB;border-radius:16px;padding:13px;margin:8px 0;font-weight:700;box-shadow:0 3px 10px rgba(139,92,246,.06);}
+.stars{font-size:56px;letter-spacing:8px;margin:10px 0;}
+.stars span{display:inline-block;animation:starpop .5s backwards;}
+.stars span:nth-child(2){animation-delay:.15s;}
+.stars span:nth-child(3){animation-delay:.3s;}
+@keyframes starpop{from{transform:scale(0) rotate(-30deg);opacity:0;}to{transform:scale(1) rotate(0);opacity:1;}}
+.stars .off{filter:grayscale(1);opacity:.3;animation:none;}
+.score-big{font-size:46px;font-weight:900;
+  background:linear-gradient(90deg,var(--pink),var(--purple));-webkit-background-clip:text;background-clip:text;color:transparent;}
+.topic-row{display:flex;justify-content:space-between;align-items:center;background:#fff;border:2px solid #F1E8FA;
+  border-radius:14px;padding:11px 15px;margin:7px 0;font-weight:700;font-size:15px;}
+.strategy{background:linear-gradient(135deg,#F0FAF9,#F6EDFF);border:2px solid #C9EDE8;border-radius:16px;padding:13px 15px;
+  margin:10px 0;font-size:15px;line-height:1.85;}
+.strategy b{color:#0F766E;}
+.locked{opacity:.5;}
+.note{font-size:13.5px;color:var(--muted);line-height:1.65;}
+.kbd-hint{font-size:13px;color:var(--muted);text-align:center;margin-top:6px;}
+.confetti{position:fixed;width:10px;height:14px;z-index:9999;pointer-events:none;border-radius:3px;
+  animation:confall 1.1s ease-in forwards;}
+@keyframes confall{to{transform:translateY(46vh) rotate(720deg);opacity:0;}}
+@media (max-width:360px){.qtext{font-size:19px;}.ans{font-size:16px;min-height:72px;}}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- מסך פתיחה -->
+  <div class="screen active" id="scr-welcome">
+    <div class="card center">
+      <div class="mascot">🦉🌟</div>
+      <h1>הרפתקת החשיבה</h1>
+      <div class="sub">משחק תרגול כייפי למבחן המחוננים — שלב א'<br>עונה נכון, צוברת כוכבים, והופכת לאלופת החשיבה!</div>
+      <div style="margin:10px 0">
+        <span class="pill">⚡ משוב מיידי עם הסבר</span>
+        <span class="pill">💡 מותר ואפילו כדאי לנחש!</span>
+      </div>
+      <input class="inp" id="inp-name" placeholder="איך קוראים לך, אלופה? ✏️" maxlength="20">
+      <div class="note center" style="margin-bottom:10px;">במבחן האמיתי יש <b>40 דקות</b>, כ-<b>30 שאלות</b> ושני חלקים:<br>חלק א' — חשבון וצורות · חלק ב' — מילים והיגיון</div>
+      <div class="sub" style="font-weight:800; color:var(--navy); margin-top:6px;">איך בא לך לשחק היום?</div>
+      <div class="mode-row">
+        <div class="mode-card sel" data-mode="full"><span class="em">🏁</span>מבחן מלא<br><span class="note">30 שאלות</span></div>
+        <div class="mode-card" data-mode="topic"><span class="em">🎯</span>תרגול נושא<br><span class="note">18 שאלות</span></div>
+        <div class="mode-card" data-mode="custom"><span class="em">🎛</span>תרגול מותאם<br><span class="note">בוחרים מה לתרגל</span></div>
+      </div>
+      <div class="tgl-row">
+        <span>⏱️ לשחק עם טיימר (כמו במבחן האמיתי)</span>
+        <label class="switch"><input type="checkbox" id="tgl-timer" checked><span class="slider"></span></label>
+      </div>
+      <button class="btn btn-primary btn-big" id="btn-start">בואי נתחיל! 🚀</button>
+      <button class="btn btn-ghost" id="btn-guide">📖 טיפים למבחן</button>
+      <button class="btn btn-ghost" id="btn-difficulties">💪 חזרה על קשיים <span id="diff-badge"></span></button>
+      <div class="note" id="diff-note">אזור "חזרה על קשיים" ייפתח אחרי שתשלימי 2 מבחנים — הוא יאסוף את השאלות שהיו לך קשות וילמד אותך דרכים לפתור אותן.</div>
+      <button class="btn btn-ghost" id="btn-parents" style="font-size:15px;padding:12px;opacity:.8">📊 דף מעקב להורים</button>
+    </div>
+  </div>
+
+  <!-- בחירת נושא -->
+  <div class="screen" id="scr-topics">
+    <div class="card">
+      <h2 class="center">🎯 בחרי נושא לתרגול</h2>
+      <div class="topic-grid" id="topic-grid"></div>
+      <button class="btn btn-ghost" id="btn-back-w1">↩ חזרה</button>
+    </div>
+  </div>
+
+  <!-- תרגול מותאם אישית -->
+  <div class="screen" id="scr-custom">
+    <div class="card">
+      <h2 class="center">🎛 תרגול בהתאמה אישית</h2>
+      <div class="sub center">בחרי נושאים וכמה שאלות — ואנחנו נרכיב לך תרגול!</div>
+      <div class="sub" style="font-weight:800;">אילו נושאים?</div>
+      <div class="topic-grid" id="custom-topics"></div>
+      <div class="sub" style="font-weight:800; margin-top:14px;">כמה שאלות?</div>
+      <div class="count-row" id="custom-counts">
+        <button class="count-btn" data-n="10">10</button>
+        <button class="count-btn sel" data-n="15">15</button>
+        <button class="count-btn" data-n="20">20</button>
+        <button class="count-btn" data-n="30">30</button>
+      </div>
+      <div class="note center" id="custom-warn" style="display:none;color:#C2185B;font-weight:700;">בחרי לפחות נושא אחד ☝️</div>
+      <button class="btn btn-primary btn-big" id="btn-custom-go">ממשיכים! 🚀</button>
+      <button class="btn btn-ghost" id="btn-back-custom">↩ חזרה</button>
+    </div>
+  </div>
+
+  <!-- מדריך -->
+  <div class="screen" id="scr-guide">
+    <div class="card">
+      <h2 class="center">📖 טיפים של אלופות למבחן</h2>
+      <div class="strategy"><b>1. קראי פעמיים 👀</b><br>בפעם הראשונה מבינים על מה השאלה, בפעם השנייה מסמנים בראש את הנתונים החשובים.</div>
+      <div class="strategy"><b>2. פסלי תשובות ✂️</b><br>תשובה שנראית מוזרה או לא קשורה? פסלי אותה מיד — ככה הניחוש שלך הופך לחכם יותר.</div>
+      <div class="strategy"><b>3. דילוג חכם ⏭️</b><br>שאלה קשה? לחצי "דלג" והמשיכי הלאה. בסוף תחזרי אליה בראש שקט — לפעמים התשובה צצה לבד אחר כך.</div>
+      <div class="strategy"><b>4. אף פעם לא להשאיר ריק! ⭐</b><br>אין הורדת נקודות על טעות — אז תמיד, תמיד לנחש. ניחוש נכון שווה נקודה שלמה!</div>
+      <div class="strategy"><b>5. נהלי את הזמן ⏱️</b><br>שימי לב לשעון. אם נשארו 5 דקות ויש 10 שאלות — זה הזמן לנחש מהר ולא להתעכב.</div>
+      <button class="btn btn-navy" id="btn-back-w2">הבנתי, בואי נשחק! 🚀</button>
+    </div>
+  </div>
+
+  <!-- מסך שאלה -->
+  <div class="screen" id="scr-quiz">
+    <div class="card">
+      <div class="quiz-top">
+        <div class="timer-wrap" id="timer-wrap">
+          <svg width="64" height="64" viewBox="0 0 64 64">
+            <circle cx="32" cy="32" r="26" fill="none" stroke="#F0E6D6" stroke-width="7"/>
+            <circle id="timer-ring" cx="32" cy="32" r="26" fill="none" stroke="#2EC4B6" stroke-width="7"
+              stroke-linecap="round" stroke-dasharray="163.3" stroke-dashoffset="0"/>
+          </svg>
+          <div class="timer-num ltr" id="timer-text">40:00</div>
+        </div>
+        <div class="qmeta">
+          <div class="qcount" id="q-count">שאלה 1 מתוך 30</div>
+          <div class="bar"><div id="q-bar-fill" style="width:0%"></div></div>
+          <span class="qtag" id="q-topic">🔢 סדרות ומספרים</span>
+        </div>
+      </div>
+      <div class="qtext" id="q-text"></div>
+      <div class="answers" id="answers"></div>
+      <div id="hint-box"></div>
+      <div class="quiz-tools">
+        <button class="tool-btn" id="btn-hint">💡 איך ניגשים?</button>
+        <button class="tool-btn" id="btn-skip">⏭ דלגי וחזרי אחר כך</button>
+        <button class="tool-btn" id="btn-quit">🏠 ראשי</button>
+      </div>
+      <div id="feedback">
+        <div class="fb-title" id="fb-title"></div>
+        <div class="fb-text" id="fb-text"></div>
+        <button class="btn btn-navy" id="btn-next" style="margin-bottom:0">לשאלה הבאה ←</button>
+      </div>
+      <div class="guess-line" id="guess-line">לא בטוחה? נחשי! אולי תגלי שידעת 💫</div>
+    </div>
+  </div>
+
+  <!-- מעבר בין חלקי המבחן -->
+  <div class="screen" id="scr-half">
+    <div class="card center">
+      <div class="mascot">🎉</div>
+      <h2>סיימת את חלק החשבון!</h2>
+      <div class="sub">כל הכבוד! עכשיו עוברים לחלק ב' —<br>מילים, הבנת הנקרא והיגיון 💪<br><br>במבחן האמיתי לכל חלק יש 20 דקות.</div>
+      <button class="btn btn-primary btn-big" id="btn-half-go">ממשיכים לחלק ב'! 🚀</button>
+    </div>
+  </div>
+
+  <!-- שאלות שדולגו -->
+  <div class="screen" id="scr-skipped">
+    <div class="card">
+      <h2 class="center">⏭ שאלות שדילגת עליהן</h2>
+      <div class="sub center">כל הכבוד שלא נתקעת! עכשיו חזרי אליהן בראש שקט.<br>זכרי: אסור להשאיר שאלה ריקה — נחשי!</div>
+      <div id="skipped-list"></div>
+      <button class="btn btn-primary btn-big" id="btn-to-summary">סיימתי לענות על הכל! 🏁</button>
+      <div class="note center" id="skipped-note"></div>
+    </div>
+  </div>
+
+  <!-- סיכום -->
+  <div class="screen" id="scr-summary">
+    <div class="card center">
+      <div class="mascot" id="sum-mascot">🦉</div>
+      <h2 id="sum-title">כל הכבוד!</h2>
+      <div class="stars" id="sum-stars"></div>
+      <div class="score-big"><span id="sum-score">0</span><span style="font-size:20px; color:var(--muted)"> / <span id="sum-total">30</span></span></div>
+      <div class="sub" id="sum-msg"></div>
+      <div id="sum-topics" style="text-align:right; margin-top:10px;"></div>
+      <div class="sub" id="sum-time" style="margin-top:8px;"></div>
+      <div style="margin-top:14px;">
+        <button class="btn btn-primary" id="btn-again">🔁 לשחק שוב</button>
+        <button class="btn btn-teal" id="btn-diff2">💪 חזרה על קשיים</button>
+        <button class="btn btn-ghost" id="btn-topics2">🎯 נושא אחר</button>
+        <button class="btn btn-ghost" id="btn-home">🏠 למסך הראשי</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- חזרה על קשיים -->
+  <div class="screen" id="scr-review">
+    <div class="card">
+      <h2 class="center">💪 חזרה על קשיים</h2>
+      <div class="sub center" id="rev-sub">אספתי את השאלות שהיו לך הכי קשות. בואי נלמד דרך לנצח כל אחת מהן!</div>
+      <div id="rev-body"></div>
+      <button class="btn btn-ghost" id="btn-home2">🏠 למסך הראשי</button>
+    </div>
+  </div>
+
+  <!-- דף הכנה -->
+  <div class="screen" id="scr-prep">
+    <div class="card">
+      <div class="mascot">🎮</div>
+      <h2 class="center">לפני שמתחילים — איך משחקים?</h2>
+      <div class="sub center" id="prep-info"></div>
+      <div class="strategy"><b>❓ עונים</b> על כל שאלה — לוחצים על אחת מ-4 התשובות.</div>
+      <div class="strategy"><b>💡 לא בטוחה?</b> לוחצים "איך ניגשים?" — מקבלים טיפ שעוזר לחשוב, בלי התשובה.</div>
+      <div class="strategy"><b>⏭ שאלה קשה?</b> לוחצים "דלגי" וממשיכים — חוזרים אליה בסוף.</div>
+      <div class="strategy"><b>🤔 תמיד לנחש!</b> אף פעם לא משאירים שאלה ריקה — ניחוש חכם יכול להיות נכון.</div>
+      <div class="strategy"><b>⭐ בסוף</b> מקבלים כוכבים ורואים איך היה בכל נושא.</div>
+      <button class="btn btn-primary btn-big" id="btn-prep-go">הבנתי, בואי נשחק! 🚀</button>
+      <button class="btn btn-ghost" id="btn-prep-back">↩ חזרה</button>
+    </div>
+  </div>
+
+  <!-- דף מעקב להורים -->
+  <div class="screen" id="scr-parents">
+    <div class="card">
+      <h2 class="center">📊 דף מעקב להורים</h2>
+      <div class="sub center">כך הילדה מתקדמת — נשמר על האייפד הזה, גם אחרי סגירה:</div>
+      <div class="topic-row"><span>🎯 תרגולים שהושלמו</span><span class="ltr" id="par-tests">0</span></div>
+      <div class="topic-row"><span>📈 ציון ממוצע</span><span class="ltr" id="par-avg">—</span></div>
+      <div class="topic-row"><span>🏆 ציון הכי טוב</span><span class="ltr" id="par-best">—</span></div>
+      <div class="topic-row"><span>⏱️ סך זמן תרגול</span><span class="ltr" id="par-time">—</span></div>
+      <div class="topic-row"><span>💪 שאלות קשות שנאספו</span><span class="ltr" id="par-diff">0</span></div>
+      <h3>📚 דיוק לפי נושא</h3>
+      <div id="par-topics"></div>
+      <h3>🕘 היסטוריה</h3>
+      <div id="par-history"></div>
+      <button class="btn btn-ghost" id="btn-reset">🗑️ איפוס נתוני מעקב</button>
+      <button class="btn btn-teal" id="btn-back-par">↩ חזרה</button>
+    </div>
+  </div>
+
+</div>
+<script>
+"use strict";
+/* ====== נתונים ====== */
+const TOPICS = {
+  numbers:{name:"סדרות ומספרים", icon:"🔢"},
+  shapes:{name:"צורות ותבניות", icon:"🔷"},
+  words:{name:"מילים והיגיון מילולי", icon:"💬"},
+  logic:{name:"בעיות מילוליות ולוגיקה", icon:"🧩"}
+};
+const LETTERS=["א","ב","ג","ד"];
+const PRAISE=["כל הכבוד! 🌟","מדהים! 🎉","אלופה! 💪","נכון מאוד! ✨","יש! 🎯"];
+const COMFORT=["ניסיון יפה! בואי נראה איך חושבים על זה 💡","לא נורא בכלל! ככה לומדים 🌱","קרוב! בואי נבין ביחד 🤗"];
+const QUESTIONS=[
+/* ===== נושא 1: סדרות ומספרים ===== */
+{id:"n1",topic:"numbers",q:'השלימי את הסדרה: <span class="ltr">2, 4, 6, 8, __</span>',options:["9","10","12","7"],correct:1,explain:"כל מספר גדול ב-2 מהקודם: 8+2=10.",hint:"בדקי מה הקפיצה בין כל שני מספרים סמוכים — היא נשארת קבועה."},
+{id:"n2",topic:"numbers",q:'השלימי את הסדרה: <span class="ltr">5, 10, 15, __</span>',options:["18","16","20","25"],correct:2,explain:"קפיצות של 5: 15+5=20.",hint:"זו סדרת הקפיצות של 5 — כמו לספור על האצבעות בחמישיות."},
+{id:"n3",topic:"numbers",q:'השלימי את הסדרה: <span class="ltr">1, 3, 5, 7, __</span>',options:["8","9","10","11"],correct:1,explain:"מספרים אי-זוגיים עולים: אחרי 7 בא 9.",hint:"שימי לב — כל המספרים בסדרה אי-זוגיים. מה האי-זוגי הבא אחרי 7?"},
+{id:"n4",topic:"numbers",q:'השלימי את הסדרה: <span class="ltr">10, 20, 30, __</span>',options:["35","40","45","50"],correct:1,explain:"קפיצות של 10: 30+10=40.",hint:"איזו קפיצה יש בין 10 ל-20? המשיכי באותה קפיצה."},
+{id:"n5",topic:"numbers",q:'השלימי את הסדרה: <span class="ltr">3, 6, 9, __</span>',options:["10","11","12","15"],correct:2,explain:"קפיצות של 3: 9+3=12.",hint:"חשבי: 3+3=6, 6+3=9… מה בא אחר כך?"},
+{id:"n6",topic:"numbers",q:'השלימי את הסדרה היורדת: <span class="ltr">20, 18, 16, __</span>',options:["12","14","15","10"],correct:1,explain:"יורדים ב-2 בכל פעם: 16-2=14.",hint:"הסדרה יורדת — בדקי בכמה יורדים בכל צעד."},
+{id:"n7",topic:"numbers",q:'השלימי את הסדרה: <span class="ltr">1, 2, 4, 8, __</span>',options:["10","12","14","16"],correct:3,explain:"כל מספר כפול 2 מהקודם: 8×2=16.",hint:"כאן הקפיצה לא קבועה — בדקי מה הקשר בין כל מספר לקודם לו. רמז: כפל."},
+{id:"n8",topic:"numbers",q:'איזה מספר חסר? <span class="ltr">7 + __ = 12</span>',options:["4","5","6","19"],correct:1,explain:"7+5=12, אז חסר 5.",hint:"שאלי את עצמך: כמה צריך להוסיף ל-7 כדי להגיע ל-12? אפשר לספור קדימה מ-7."},
+{id:"n9",topic:"numbers",q:'איזה מספר חסר? <span class="ltr">__ − 4 = 9</span>',options:["5","9","13","14"],correct:2,explain:"13−4=9, אז המספר החסר הוא 13.",hint:"הפכי את התרגיל: איזה מספר פחות 4 נותן 9? נסי לחבר: 9+4=?"},
+{id:"n10",topic:"numbers",q:"איזה מספר הוא זוגי?",options:["3","7","12","9"],correct:2,explain:"12 מתחלק ב-2 בלי שארית — הוא זוגי.",hint:"מספר זוגי מסתיים ב-0, 2, 4, 6 או 8. בדקי את הספרה האחרונה."},
+{id:"n11",topic:"numbers",q:"איזה מספר הוא אי-זוגי?",options:["4","8","11","20"],correct:2,explain:"11 מסתיים ב-1 — הוא אי-זוגי.",hint:"מספר אי-זוגי מסתיים ב-1, 3, 5, 7 או 9."},
+{id:"n12",topic:"numbers",q:'השלימי את הסדרה: <span class="ltr">100, 90, 80, __</span>',options:["60","70","75","85"],correct:1,explain:"יורדים ב-10: 80−10=70.",hint:"זו סדרה יורדת בעשרות. המשיכי לרדת באותו קצב."},
+{id:"n13",topic:"numbers",q:'כמה זה <span class="ltr">5 × 2</span>?',options:["7","10","12","15"],correct:1,explain:"5×2 זה 5+5=10.",hint:"כפל הוא חיבור חוזר: 5 ועוד 5."},
+{id:"n14",topic:"numbers",q:"כמה זה חצי מ-14?",options:["6","7","8","12"],correct:1,explain:"14 לחלק ל-2 שווה 7.",hint:"חצי מ-14: איזה מספר ועוד עצמו נותן 14?"},
+{id:"n15",topic:"numbers",q:'השלימי את הסדרה: <span class="ltr">4, 8, 12, __</span>',options:["14","15","16","20"],correct:2,explain:"קפיצות של 4: 12+4=16.",hint:"זו לוח הכפל של 4: 4, 8, 12… מה בא אחר כך?"},
+{id:"n16",topic:"numbers",q:"איזה מספר גדול מ-47 אבל קטן מ-52?",options:["53","46","50","44"],correct:2,explain:"50 נמצא בין 47 ל-52.",hint:"פסלי תשובות: מה גדול מדי? מה קטן מדי? מה נשאר?"},
+{id:"n17",topic:"numbers",q:'השלימי את הסדרה: <span class="ltr">9, 7, 5, __</span>',options:["4","3","2","6"],correct:1,explain:"יורדים ב-2: 5−2=3.",hint:"סדרה יורדת של אי-זוגיים. לכי אחורה בצעדים של 2."},
+{id:"n18",topic:"numbers",q:'כמה זה <span class="ltr">3 + 3 + 3 + 3</span>?',options:["9","10","12","15"],correct:2,explain:"ארבע פעמים 3 זה 12.",hint:"ספרי כמה פעמים מופיע 3, ואז חשבי: 4 פעמים 3."},
+/* ===== נושא 2: צורות ותבניות ===== */
+{id:"s1",topic:"shapes",q:'מה בא אחר כך? <span class="ltr">🔺 🔵 🔺 🔵 🔺 __</span>',options:["🔵","🔺","⭐","🟢"],correct:0,explain:"הצורות מתחלפות: משולש, עיגול, משולש, עיגול… אחרי 🔺 בא 🔵.",hint:"חפשי תבנית חוזרת: מה בא אחרי כל 🔺?"},
+{id:"s2",topic:"shapes",q:'מה בא אחר כך? <span class="ltr">⭐ ⭐ 🌙 ⭐ ⭐ 🌙 ⭐ __</span>',options:["⭐","🌙","🌈","☁️"],correct:0,explain:"התבנית היא שני כוכבים וירח, שחוזרת על עצמה.",hint:"חלקי לקבוצות קטנות זהות — איזו קבוצה חוזרת?"},
+{id:"s3",topic:"shapes",q:'הביטי בשורה: <span class="ltr">🔴 🔴 🟥 🔴</span> איזו צורה שונה מהאחרות?',options:["🔴","🟥","🔵","🟢"],correct:1,explain:"שלוש צורות הן עיגולים ורק אחת היא ריבוע.",hint:"מה משותף לשלוש מהצורות? חפשי את זו שלא מתאימה."},
+{id:"s4",topic:"shapes",q:'מה בא אחר כך? <span class="ltr">🟢🟢 🔴 🟢🟢 🔴 🟢🟢 __</span>',options:["🔴","🟢","🟡","🔵"],correct:0,explain:"התבנית: שני ירוקים ואדום אחד, שוב ושוב.",hint:"ספרי כמה ירוקים באים לפני כל אדום."},
+{id:"s5",topic:"shapes",q:'כמה עיגולים כחולים יש כאן? <span class="ltr">🔵 🔴 🔵 🟢 🔵</span>',options:["2","3","4","5"],correct:1,explain:"יש שלושה עיגולים כחולים.",hint:"ספרי לאט, אחד אחד, רק את הכחולים — דלגי על הצבעים האחרים."},
+{id:"s6",topic:"shapes",q:'מה בא אחר כך? <span class="ltr">⬛ ⬜ ⬛ ⬜ ⬛ __</span>',options:["⬜","⬛","🟫","🔶"],correct:0,explain:"ריבוע שחור ולבן מתחלפים — אחרי שחור בא לבן.",hint:"זו תבנית של שניים שמתחלפים. מה היה לפני כל לבן?"},
+{id:"s7",topic:"shapes",q:'הביטי בשורה: <span class="ltr">🍎 🍎 🍎 🍐</span> איזה פרי שונה?',options:["🍎","🍐","🍇","🍊"],correct:1,explain:"שלושה תפוחים אדומים ואגס אחד ירוק.",hint:"שלושה דומים ואחד שונה — מה מייחד את השונה?"},
+{id:"s8",topic:"shapes",q:'מה בא אחר כך? <span class="ltr">🔴 🟡 🟢 🔴 🟡 🟢 🔴 __</span>',options:["🟡","🔴","🟢","🔵"],correct:0,explain:"התבנית בת שלושה צבעים חוזרת: אדום, צהוב, ירוק.",hint:"מצאי את היחידה החוזרת — שלושה צבעים בסדר קבוע."},
+{id:"s9",topic:"shapes",q:'החיות מסודרות מהקטנה לגדולה: <span class="ltr">🐭 🐱 🐶 __</span> מי באה אחרונה?',options:["🐜","🐴","🐥","🐢"],correct:1,explain:"הסוס גדול מהכלב, אז הוא האחרון בסדר עולה.",hint:"חשבי איזו חיה הכי גדולה מכולן — היא סוגרת את השורה."},
+{id:"s10",topic:"shapes",q:'מה בא אחר כך? <span class="ltr">🌸 🌸 🌼 🌸 🌸 🌼 🌸 __</span>',options:["🌸","🌼","🌺","🌻"],correct:0,explain:"שני פרחים ורודים ואז צהוב — התבנית חוזרת.",hint:"אחרי כל 🌼 כמה 🌸 באים? המשיכי באותו קצב."},
+{id:"s11",topic:"shapes",q:'הביטי בשורה: <span class="ltr">⬛ ⬛ 🟥 ⬛</span> איזו צורה שונה?',options:["⬛","🟥","⬜","🔶"],correct:1,explain:"שלושה ריבועים שחורים וריבוע אדום אחד.",hint:"הצבע שונה, הצורה זהה — חפשי את הצבע היוצא דופן."},
+{id:"s12",topic:"shapes",q:'מה בא אחר כך? <span class="ltr">🔺🔺 🔵 🔺🔺 🔵 🔺 __</span>',options:["🔺","🔵","⭐","🟢"],correct:0,explain:"שני משולשים ואז עיגול — התבנית חוזרת.",hint:"ספרי כמה 🔺 באים לפני כל 🔵."},
+{id:"s13",topic:"shapes",q:'מה בא אחר כך? <span class="ltr">🌞 🌞 🌜 🌞 🌞 __</span>',options:["🌜","🌞","⭐","☁️"],correct:0,explain:"שתי שמשות ואז ירח — התבנית חוזרת.",hint:"כמה 🌞 באות לפני כל 🌜?"},
+{id:"s14",topic:"shapes",q:"בשורה היו 7 כוכבים, ו-2 נמחקו. כמה כוכבים נשארו?",options:["4","5","6","9"],correct:1,explain:"7 פחות 2 שווה 5.",hint:"הפכי לסיפור חשבון: 7−2=?"},
+{id:"s15",topic:"shapes",q:'מה בא אחר כך? <span class="ltr">🔴 🔵 🟢 🔴 🔵 __</span>',options:["🟢","🔴","🔵","🟡"],correct:0,explain:"שלושה צבעים בסדר קבוע שחוזר על עצמו.",hint:"כתבי בראש את הסדר: אדום, כחול, ירוק, אדום, כחול…"},
+{id:"s16",topic:"shapes",q:'הביטי בשורה: <span class="ltr">🐘 🐘 🐭 🐘</span> איזו חיה שונה בגודל?',options:["🐘","🐭","🦒","🐳"],correct:1,explain:"שלושה פילים גדולים ועכבר אחד קטן.",hint:"כאן ההבדל הוא בגודל, לא בצורה. מי הזעיר בחבורה?"},
+{id:"s17",topic:"shapes",q:'מה בא אחר כך? <span class="ltr">🍎 🍏 🍎 🍏 🍎 __</span>',options:["🍏","🍎","🍐","🍊"],correct:0,explain:"תפוח אדום ותפוח ירוק מתחלפים.",hint:"שני צבעים מתחלפים אחד אחרי השני."},
+{id:"s18",topic:"shapes",q:'מה בא אחר כך? <span class="ltr">🔷 🔷 🔶 🔷 🔷 🔶 🔷 __</span>',options:["🔷","🔶","🔻","⬛"],correct:0,explain:"שני מעוינים כחולים ואחד כתום — התבנית חוזרת.",hint:"מצאי כמה 🔷 באים לפני כל 🔶."},
+/* ===== נושא 3: מילים והיגיון מילולי ===== */
+{id:"w1",topic:"words",q:'איזו מילה נרדפת ל"שמח"?',options:["עצוב","עליז","עייף","כועס"],correct:1,explain:'"עליז" פירושו שמח.',hint:"מילה נרדפת = מילה עם אותו פירוש. איזו מילה מרגישה כמו שמח?"},
+{id:"w2",topic:"words",q:'מה ההפך מהמילה "גדול"?',options:["רחב","קטן","גבוה","ארוך"],correct:1,explain:'ההפך מגדול הוא קטן.',hint:"חשבי על פיל ועכבר — הפיל גדול, העכבר…?"},
+{id:"w3",topic:"words",q:"אבא : בן = אמא : ___",options:["בת","אח","סבא","דוד"],correct:0,explain:"כמו שאבא הוא ההורה של הבן, אמא היא ההורה של הבת.",hint:"השלימי את הזוג: אבא הולך עם בן, אז אמא הולכת עם…?"},
+{id:"w4",topic:"words",q:"יום : לילה = אור : ___",options:["שמש","חושך","בוקר","נר"],correct:1,explain:"כמו שהלילה הוא ההפך מהיום, החושך הוא ההפך מהאור.",hint:"כאן הקשר הוא הפכים. מה ההפך מאור?"},
+{id:"w5",topic:"words",q:"איזו מילה שונה מהאחרות? תפוח, בננה, גזר, ענבים",options:["תפוח","בננה","גזר","ענבים"],correct:2,explain:"הגזר הוא ירק, וכל השאר פירות.",hint:"שלוש מהמילים שייכות לאותה קבוצה. מה אוכלים כקינוח ומה בארוחה?"},
+{id:"w6",topic:"words",q:"איזו מילה שונה מהאחרות? כלב, חתול, דג, מכונית",options:["כלב","חתול","דג","מכונית"],correct:3,explain:"המכונית אינה בעל חיים.",hint:"שלוש הן יצורים חיים. מי לא נושמת?"},
+{id:"w7",topic:"words",q:"ציפור : קן = דבורה : ___",options:["פרח","כוורת","דבש","עץ"],correct:1,explain:"הקן הוא הבית של הציפור, והכוורת היא הבית של הדבורה.",hint:"הקשר הוא 'בית של'. איפה גרה הדבורה?"},
+{id:"w8",topic:"words",q:"ספר : קריאה = עיפרון : ___",options:["כתיבה","שינה","אכילה","ריצה"],correct:0,explain:"בספר קוראים, ובעיפרון כותבים.",hint:"מה עושים עם כל אחד מהם? ספר → קוראים, עיפרון → …?"},
+{id:"w9",topic:"words",q:'איזו מילה נרדפת ל"מהר"?',options:["לאט","במהירות","בזהירות","בשקט"],correct:1,explain:'"במהירות" פירושו מהר.',hint:"חפשי את המילה עם אותו שורש: מ-ה-ר."},
+{id:"w10",topic:"words",q:'מה ההפך מהמילה "קר"?',options:["קריר","חם","נעים","רטוב"],correct:1,explain:'ההפך מקר הוא חם.',hint:"חשבי על חורף מול קיץ."},
+{id:"w11",topic:"words",q:'קראי את הקטע ועני: "אנה זק אוהבת לקרוא ספרים. כל ערב לפני השינה היא קוראת פרק אחד. אתמול היא סיימה ספר בן שבעה פרקים."<br>כמה ערבים קראה אנה זק את הספר?',options:["5","6","7","8"],correct:2,explain:"הספר בן שבעה פרקים, ובכל ערב היא קראה פרק אחד — אז שבעה ערבים.",hint:"חפשי בקטע שני מספרים: כמה פרקים בספר, וכמה פרקים בכל ערב."},
+{id:"w12",topic:"words",q:'קראי את הקטע ועני: "אנה זק אוהבת לקרוא ספרים. כל ערב לפני השינה היא קוראת פרק אחד. אתמול היא סיימה ספר בן שבעה פרקים."<br>לפי הקטע: מתי אנה זק קוראת ספרים?',options:["בבוקר","בצהריים","בערב לפני השינה","באמצע הלילה"],correct:2,explain:'כתוב במפורש: "כל ערב לפני השינה".',hint:"התשובה כתובה מילה במילה בקטע — חפשי מתי."},
+{id:"w13",topic:"words",q:'קראי את הקטע ועני: "בגן החיות גרים אריה אחד, שני קופים ותוכי אחד. הקופים אוהבים לאכול בננות."<br>כמה חיות יש בגן בסך הכל?',options:["3","4","5","6"],correct:1,explain:"1 אריה + 2 קופים + 1 תוכי = 4 חיות.",hint:"ספרי כל חיה: אריה אחד, ועוד שניים, ועוד אחד…"},
+{id:"w14",topic:"words",q:'קראי את הקטע ועני: "בגן החיות גרים אריה אחד, שני קופים ותוכי אחד. הקופים אוהבים לאכול בננות."<br>לפי הקטע: מה אוהבים הקופים לאכול?',options:["תפוחים","בננות","גזר","לחם"],correct:1,explain:'כתוב במפורש: "הקופים אוהבים לאכול בננות".',hint:"התשובה במשפט האחרון של הקטע."},
+{id:"w15",topic:"words",q:"איזו מילה שונה מהאחרות? כיסא, שולחן, מיטה, תפוח",options:["כיסא","שולחן","מיטה","תפוח"],correct:3,explain:"התפוח הוא פרי, וכל השאר רהיטים.",hint:"שלוש מהמילים נמצאות בחדר. איפה לא יושבים ולא ישנים?"},
+{id:"w16",topic:"words",q:"דג : מים = ציפור : ___",options:["קן","שמיים","עץ","אדמה"],correct:1,explain:"הדג חי במים, והציפור עפה בשמיים.",hint:"הקשר הוא 'איפה חי'. איפה חיה הציפור?"},
+{id:"w17",topic:"words",q:'איזו מילה נרדפת ל"יפה"?',options:["מכוער","נאה","גדול","חזק"],correct:1,explain:'"נאה" פירושו יפה.',hint:"פסלי את ההפך (מכוער) ואת הלא-קשורות."},
+{id:"w18",topic:"words",q:"רופא : חולים = מורה : ___",options:["תלמידים","ספרים","כיתה","לוח"],correct:0,explain:"הרופא מטפל בחולים, והמורה מלמדת תלמידים.",hint:"הקשר הוא 'במי מטפל'. במי מטפלת המורה?"},
+/* ===== נושא 4: בעיות מילוליות ולוגיקה ===== */
+{id:"l1",topic:"logic",q:"לנועה קירל היו 5 תפוחים. אמא נתנה לה עוד 3 תפוחים. כמה תפוחים יש לנועה קירל עכשיו?",options:["7","8","9","10"],correct:1,explain:"5+3=8.",hint:"'נתנה לה עוד' אומר שמחברים. 5+3=?"},
+{id:"l2",topic:"logic",q:"בכיתה יש 12 ילדים. 4 ילדים יצאו לחצר. כמה ילדים נשארו בכיתה?",options:["7","8","9","16"],correct:1,explain:"12−4=8.",hint:"'יצאו' אומר שמחסרים. 12−4=?"},
+{id:"l3",topic:"logic",q:"לסטטיק היו 10 גולות. הוא נתן 4 גולות לחבר. כמה גולות נשארו לו?",options:["4","5","6","14"],correct:2,explain:"10−4=6.",hint:"נתן = פחות. 10−4=?"},
+{id:"l4",topic:"logic",q:"על עץ ישבו 6 ציפורים. עוד 2 ציפורים הצטרפו אליהן. כמה ציפורים על העץ עכשיו?",options:["4","6","8","12"],correct:2,explain:"6+2=8.",hint:"'הצטרפו' אומר שמחברים."},
+{id:"l5",topic:"logic",q:"בקופסה היו 9 עוגיות. אכלו 3 עוגיות. כמה עוגיות נשארו בקופסה?",options:["3","6","9","12"],correct:1,explain:"9−3=6.",hint:"'אכלו' אומר שמחסרים."},
+{id:"l6",topic:"logic",q:'אנה זק קנתה מחברת ב-7 שקלים ושילמה בשטר של 10 שקלים. כמה עודף היא קיבלה?',options:["2 שקלים","3 שקלים","4 שקלים","17 שקלים"],correct:1,explain:"10−7=3 שקלים עודף.",hint:"עודף = מה ששילמה פחות המחיר: 10−7."},
+{id:"l7",topic:"logic",q:"אמא חילקה 12 סוכריות שווה בשווה בין 3 ילדים. כמה סוכריות קיבל כל ילד?",options:["3","4","5","6"],correct:1,explain:"12 לחלק ל-3 שווה 4.",hint:"'שווה בשווה' אומר לחלק. איזה מספר כפול 3 נותן 12?"},
+{id:"l8",topic:"logic",q:"סטטיק בן 8, ואחותו בת 5. בכמה שנים סטטיק גדול מאחותו?",options:["2","3","4","13"],correct:1,explain:"8−5=3 שנים.",hint:"הפרש גילים = הגדול פחות הקטן."},
+{id:"l9",topic:"logic",q:"אגם בוחבוט גבוהה מסטטיק, וסטטיק גבוה מאנה זק. מי הגבוהה ביותר?",options:["אגם בוחבוט","סטטיק","אנה זק","אי אפשר לדעת"],correct:0,explain:"אגם בוחבוט גבוהה מסטטיק שגבוה מאנה זק — אז אגם בוחבוט הכי גבוהה.",hint:"סדרי בראש מהגבוה לנמוך: מי מעל מי?"},
+{id:"l10",topic:"logic",q:"אנה זק כבדה מסטטיק, וסטטיק כבד מאודיה. מי הקל ביותר?",options:["אנה זק","סטטיק","אודיה","אי אפשר לדעת"],correct:2,explain:"אודיה הכי קלה, כי סטטיק כבד ממנה ואנה זק כבדה מסטטיק.",hint:"סדרי מהכבד לקל — מי בתחתית הרשימה?"},
+{id:"l11",topic:"logic",q:"אם היום יום שני, איזה יום יהיה מחר?",options:["ראשון","שלישי","רביעי","שני"],correct:1,explain:"אחרי שני בא שלישי.",hint:"שירי את ימי השבוע בראש: ראשון, שני…"},
+{id:"l12",topic:"logic",q:"אם אתמול היה יום חמישי, איזה יום היום?",options:["רביעי","חמישי","שישי","שבת"],correct:2,explain:"היום שאחרי חמישי הוא שישי.",hint:"מה בא אחרי חמישי?"},
+{id:"l13",topic:"logic",q:"בשקית יש 4 כדורים אדומים ו-3 כדורים כחולים. כמה כדורים יש בשקית בסך הכל?",options:["5","6","7","12"],correct:2,explain:"4+3=7.",hint:"'בסך הכל' אומר לחבר את שתי הקבוצות."},
+{id:"l14",topic:"logic",q:'אודיה קמה ב-7:00 וההסעה מגיעה ב-7:30. כמה דקות יש לה להתארגן?',options:["20 דקות","25 דקות","30 דקות","60 דקות"],correct:2,explain:"מ-7:00 עד 7:30 עוברות 30 דקות.",hint:"חצי שעה = 30 דקות."},
+{id:"l15",topic:"logic",q:"סבא בן 70 ואבא בן 40. בכמה שנים סבא מבוגר מאבא?",options:["20","30","40","110"],correct:1,explain:"70−40=30 שנים.",hint:"הפרש = הגדול פחות הקטן: 70−40."},
+{id:"l16",topic:"logic",q:"בחנות יש 5 מדפים, ועל כל מדף 2 ספרים. כמה ספרים יש בחנות?",options:["7","8","10","12"],correct:2,explain:"5 פעמים 2 שווה 10.",hint:"5 מדפים × 2 ספרים. אפשר לחבר: 2+2+2+2+2."},
+{id:"l17",topic:"logic",q:"כל הכלבים אוהבים לטייל. רקסי הוא כלב. מה נכון לומר?",options:["רקסי אוהב לטייל","רקסי לא אוהב לטייל","רקסי הוא חתול","אי אפשר לדעת"],correct:0,explain:"אם כל הכלבים אוהבים לטייל ורקסי כלב — גם הוא אוהב לטייל.",hint:"הכלל חל על כולם, ורקסי הוא אחד מה'כולם'."},
+{id:"l18",topic:"logic",q:"כל הציפורים עפות. התוכי הוא ציפור. מה נכון לומר?",options:["התוכי עף","התוכי שוחה","התוכי לא זז","אי אפשר לדעת"],correct:0,explain:"הכלל חל על כל הציפורים, והתוכי הוא ציפור.",hint:"כמו בשאלה הקודמת — החוק הכללי חל גם עליו."},
+/* ===== תוספת: עוד 22 שאלות מספרים ===== */
+{id:"n19",topic:"numbers",q:'השלימי את הסדרה: <span class="ltr">10, 20, 30, 40, __</span>',options:["45","50","55","60"],correct:1,explain:"קפיצות של 10: 40+10=50.",hint:"בכמה קופצים בכל פעם?"},
+{id:"n20",topic:"numbers",q:'השלימי את הסדרה היורדת: <span class="ltr">30, 25, 20, 15, __</span>',options:["5","10","12","15"],correct:1,explain:"מחסרים 5 בכל פעם: 15−5=10.",hint:"הסדרה יורדת — בכמה בכל צעד?"},
+{id:"n21",topic:"numbers",q:'השלימי את הסדרה: <span class="ltr">2, 4, 8, 16, __</span>',options:["24","30","32","36"],correct:2,explain:"מכפילים ב-2: 16×2=32.",hint:"כאן לא מוסיפים — מכפילים."},
+{id:"n22",topic:"numbers",q:'איזה מספר חסר? <span class="ltr">9, 18, 27, __, 45</span>',options:["32","34","36","38"],correct:2,explain:"קפיצות של 9: 27+9=36.",hint:"בדקי את המרחק בין 9 ל-18."},
+{id:"n23",topic:"numbers",q:'השלימי את הסדרה: <span class="ltr">6, 12, 18, 24, __</span>',options:["28","30","32","36"],correct:1,explain:"קפיצות של 6: 24+6=30.",hint:"איזו קפיצה חוזרת?"},
+{id:"n24",topic:"numbers",q:'איזה מספר חסר? <span class="ltr">40, 36, 32, __, 24</span>',options:["26","28","30","34"],correct:1,explain:"מחסרים 4: 32−4=28.",hint:"יורדים תמיד באותו מרחק."},
+{id:"n25",topic:"numbers",q:'השלימי את הסדרה: <span class="ltr">1, 1, 2, 3, 5, 8, __</span>',options:["11","12","13","15"],correct:2,explain:"כל מספר הוא סכום שני הקודמים: 5+8=13.",hint:"חברי כל שני מספרים סמוכים — מה קיבלת?"},
+{id:"n26",topic:"numbers",q:'כמה זה <span class="ltr">20 − 8</span>?',options:["10","11","12","13"],correct:2,explain:"20−8=12.",hint:"20 פחות 10 זה 10, אז פחות 8 זה 2 יותר."},
+{id:"n27",topic:"numbers",q:'כמה זה <span class="ltr">5 × 4</span>?',options:["9","15","20","25"],correct:2,explain:"5×4=20.",hint:"5+5+5+5."},
+{id:"n28",topic:"numbers",q:'כמה זה <span class="ltr">18 ÷ 3</span>?',options:["5","6","7","9"],correct:1,explain:"18 לחלק ל-3 שווה 6.",hint:"איזה מספר כפול 3 נותן 18?"},
+{id:"n29",topic:"numbers",q:'השלימי את הסדרה: <span class="ltr">1, 3, 6, 10, __</span>',options:["13","14","15","16"],correct:2,explain:"הקפיצות גדלות: +2, +3, +4, +5. 10+5=15.",hint:"בדקי את הקפיצות — הן לא קבועות, הן גדלות."},
+{id:"n30",topic:"numbers",q:'איזה מספר חסר? <span class="ltr">81, 72, 63, __, 45</span>',options:["52","54","56","58"],correct:1,explain:"מחסרים 9: 63−9=54.",hint:"81→72 זה פחות 9. המשיכי."},
+{id:"n31",topic:"numbers",q:"איזה מספר מתחלק ב-5 בלי שארית?",options:["23","31","35","42"],correct:2,explain:"35 מתחלק ב-5.",hint:"מספרים שמתחלקים ב-5 מסתיימים ב-0 או ב-5."},
+{id:"n32",topic:"numbers",q:'השלימי את הסדרה: <span class="ltr">7, 10, 13, 16, __</span>',options:["18","19","20","21"],correct:1,explain:"מוסיפים 3: 16+3=19.",hint:"7→10 זה +3…"},
+{id:"n33",topic:"numbers",q:'השלימי את הסדרה: <span class="ltr">1, 4, 9, 16, __</span>',options:["20","23","25","30"],correct:2,explain:"1×1, 2×2, 3×3, 4×4 — הבא הוא 5×5=25.",hint:"כל מספר הוא מספר כפול עצמו."},
+{id:"n34",topic:"numbers",q:'כמה זה <span class="ltr">14 + 9</span>?',options:["21","22","23","24"],correct:2,explain:"14+9=23.",hint:"14+10=24, אז 14+9 זה אחד פחות."},
+{id:"n35",topic:"numbers",q:'כמה זה <span class="ltr">30 − 14</span>?',options:["14","15","16","17"],correct:2,explain:"30−14=16.",hint:"30 פחות 10 זה 20, ועוד פחות 4."},
+{id:"n36",topic:"numbers",q:'השלימי את הסדרה: <span class="ltr">3, 9, 27, __</span>',options:["54","63","72","81"],correct:3,explain:"מכפילים ב-3: 27×3=81.",hint:"3→9 זה כפול 3. המשיכי להכפיל."},
+{id:"n37",topic:"numbers",q:"איזה מספר הוא הגדול ביותר?",options:["89","98","88","90"],correct:1,explain:"98 הוא הגדול ביותר.",hint:"השווי את ספרת העשרות של כל מספר."},
+{id:"n38",topic:"numbers",q:'השלימי את הסדרה: <span class="ltr">11, 22, 33, 44, __</span>',options:["45","50","55","60"],correct:2,explain:"קפיצות של 11: 44+11=55.",hint:"11→22 זה +11…"},
+{id:"n39",topic:"numbers",q:'איזה מספר חסר? <span class="ltr">4, __, 16, 32, 64</span>',options:["6","8","10","12"],correct:1,explain:"מכפילים ב-2: 4×2=8.",hint:"לכי אחורה: 16 לחלק ל-2 זה…?"},
+{id:"n40",topic:"numbers",q:'כמה זה <span class="ltr">7 × 7</span>?',options:["42","46","48","49"],correct:3,explain:"7×7=49.",hint:"7×6=42, ועוד 7."},
+{id:"n41",topic:"numbers",q:'<span class="ltr">🌟 + 🌟 = 10</span><br>כמה שווה 🌟?',options:["4","5","6","10"],correct:1,explain:"5+5=10.",hint:"איזה מספר ועוד עצמו נותן 10?"},
+{id:"n42",topic:"numbers",q:'<span class="ltr">3 × 🎈 = 12</span><br>כמה שווה 🎈?',options:["3","4","5","6"],correct:1,explain:"3×4=12.",hint:"איזה מספר כפול 3 נותן 12?"},
+{id:"n43",topic:"numbers",q:'<span class="ltr">🍎 − 4 = 7</span><br>כמה שווה 🍎?',options:["3","7","11","12"],correct:2,explain:"11−4=7.",hint:"לכי אחורה: 7+4=?"},
+{id:"n44",topic:"numbers",q:'<span class="ltr">2 × ⭐ = 10</span><br><span class="ltr">⭐ + 🌙 = 9</span><br>כמה שווה 🌙?',options:["3","4","5","6"],correct:1,explain:"⭐=5, ואז 5+🌙=9, לכן 🌙=4.",hint:"קודם מצאי את ⭐, ואז חשבי מה חסר."},
+{id:"n45",topic:"numbers",q:"בשקית של 100 גרם יש 8 סוכריות. כמה סוכריות יש בשקית של 300 גרם?",options:["16","20","24","32"],correct:2,explain:"300 גרם זה פי 3 מ-100, אז גם הסוכריות פי 3: 8×3=24.",hint:"300 זה פי כמה מ-100?"},
+/* ===== תוספת: עוד 22 שאלות צורות ===== */
+{id:"s19",topic:"shapes",q:"מה בא אחר כך? 🟠 🟣 🟠 🟣 __",options:["🟠","🟣","🟢","🔴"],correct:0,explain:"כתום וסגול מתחלפים.",hint:"שתי צורות מתחלפות — מי הייתה לפני האחרונה?"},
+{id:"s20",topic:"shapes",q:"מה בא אחר כך? 🔷 🔶 🔷 🔶 🔷 __",options:["🔷","🔶","⬛","⭕"],correct:1,explain:"מעוין כחול וכתום מתחלפים.",hint:"כמו תבנית אדום-כחול, רק בצורות אחרות."},
+{id:"s21",topic:"shapes",q:"מה בא אחר כך? 🌞 🌞 🌜 🌞 🌞 🌜 __",options:["🌞","🌜","⭐","☁️"],correct:0,explain:"היחידה 🌞🌞🌜 חוזרת מההתחלה.",hint:"סמני היכן מתחילה כל יחידה חוזרת."},
+{id:"s22",topic:"shapes",q:"כמה מלבנים יש כאן? ⬜⬜⬜",options:["2","3","4","5"],correct:1,explain:"שלושה מלבנים.",hint:"ספרי לאט, אחד אחד."},
+{id:"s23",topic:"shapes",q:"מה בא אחר כך? ❤️ 💙 ❤️ 💙 ❤️ __",options:["❤️","💙","💚","💛"],correct:1,explain:"לב אדום וכחול מתחלפים.",hint:"שני צבעים מתחלפים."},
+{id:"s24",topic:"shapes",q:"מה בא אחר כך? 🐘 🐘 🦁 🐘 🐘 🦁 __",options:["🐘","🦁","🐵","🦒"],correct:0,explain:"היחידה 🐘🐘🦁 חוזרת מההתחלה.",hint:"כמה פילים יש לפני כל אריה?"},
+{id:"s25",topic:"shapes",q:"הביטי בשורה: 🍎 🍎 🍐 🍎 איזו צורה שונה מהאחרות?",options:["הראשונה","השנייה","השלישית","הרביעית"],correct:2,explain:"שלושה תפוחים ואגס אחד.",hint:"שלוש זהות ואחת שונה — איזו?"},
+{id:"s26",topic:"shapes",q:"כמה צלעות יש למחומש?",options:["4","5","6","8"],correct:1,explain:"למחומש יש 5 צלעות.",hint:"'מחומש' נשמע כמו 'חמש'."},
+{id:"s27",topic:"shapes",q:'מה בא אחר כך? <span class="ltr">⬛ ⭕ ⬛ ⭕ ⬛ __</span>',options:["⬛","⭕","🔺","⭐"],correct:1,explain:"ריבוע ועיגול מתחלפים.",hint:"אחרי ⬛ תמיד בא ⭕."},
+{id:"s28",topic:"shapes",q:"מה בא אחר כך? 🍓 🍓 🫐 🍓 🍓 🫐 __",options:["🍓","🫐","🍇","🍒"],correct:0,explain:"היחידה 🍓🍓🫐 חוזרת מההתחלה.",hint:"מצאי את הקבוצה הקטנה שחוזרת."},
+{id:"s29",topic:"shapes",q:"מה בא אחר כך? 🔼 🔽 🔽 🔼 🔽 🔽 __",options:["🔼","🔽","⏫","⏬"],correct:0,explain:"היחידה 🔼🔽🔽 חוזרת מההתחלה.",hint:"מה בא בתחילת כל יחידה חוזרת?"},
+{id:"s30",topic:"shapes",q:"כמה משולשים וכמה ריבועים? 🔺⬜🔺⬜",options:["2 משולשים ו-2 ריבועים","3 משולשים וריבוע אחד","2 משולשים ו-3 ריבועים","4 משולשים"],correct:0,explain:"שני משולשים ושני ריבועים.",hint:"ספרי כל צורה בנפרד."},
+{id:"s31",topic:"shapes",q:'מה בא אחר כך? <span class="ltr">🟢 🟢 🟢 🔵 🟢 🟢 🟢 🔵 __</span>',options:["🟢","🔵","🟡","🟠"],correct:0,explain:"היחידה 🟢🟢🟢🔵 חוזרת מההתחלה.",hint:"כמה ירוקים יש לפני כל כחול?"},
+{id:"s32",topic:"shapes",q:"איזו חיה הכי קטנה? 🐘 🐭 🐱 🐶",options:["🐘","🐭","🐱","🐶"],correct:1,explain:"העכבר הכי קטן.",hint:"דמייני כל חיה — מי נכנסת לכיס?"},
+{id:"s33",topic:"shapes",q:"מה בא אחר כך? 🌹 🌷 🌹 🌷 🌹 __",options:["🌹","🌷","🌻","🌺"],correct:1,explain:"שני פרחים מתחלפים.",hint:"אחרי 🌹 תמיד בא 🌷."},
+{id:"s34",topic:"shapes",q:"הביטי בשורה: ⭐ ⭐ ⭐ 🌙 ⭐ איזו צורה שונה מהאחרות?",options:["הראשונה","השנייה","השלישית","הרביעית"],correct:3,explain:"ארבעה כוכבים וירח אחד.",hint:"איזו צורה לא כוכב?"},
+{id:"s35",topic:"shapes",q:'מה בא אחרי כחול בקשת? <span class="ltr">🔴 🟠 🟡 🟢 🔵 __</span>',options:["🟣","⚫","⚪","🟤"],correct:0,explain:"צבעי הקשת: אדום, כתום, צהוב, ירוק, כחול, סגול.",hint:"שירי את צבעי הקשת בראש."},
+{id:"s36",topic:"shapes",q:"כמה זוגות גרביים יש כאן? 🧦🧦 🧦🧦",options:["זוג אחד","2 זוגות","3 זוגות","4 זוגות"],correct:1,explain:"שני זוגות.",hint:"זוג = שניים ביחד."},
+{id:"s37",topic:"shapes",q:"מה בא אחר כך? 🅰️ 🅱️ 🅰️ 🅱️ __",options:["🅰️","🅱️","🆎","🅾️"],correct:0,explain:"A ו-B מתחלפות.",hint:"שתי אותיות מתחלפות."},
+{id:"s38",topic:"shapes",q:"כמה עוגיות יש כאן? 🍪🍪🍪",options:["2","3","4","5"],correct:1,explain:"שלוש עוגיות.",hint:"ספרי את העוגיות אחת אחת."},
+{id:"s39",topic:"shapes",q:"מה בא אחר כך? ◀️ ▶️ ◀️ ▶️ ◀️ __",options:["◀️","▶️","🔼","🔽"],correct:1,explain:"חץ שמאלה וחץ ימינה מתחלפים.",hint:"לאן פונה החץ האחרון? הבא פונה הפוך."},
+{id:"s40",topic:"shapes",q:"כמה עיגולים כחולים? 🔵🔵🔵🔵",options:["3","4","5","6"],correct:1,explain:"ארבעה עיגולים.",hint:"ספרי לאט."},
+/* ===== תוספת: עוד 22 שאלות מילים ===== */
+{id:"w19",topic:"words",q:'איזו מילה נרדפת ל"מהיר"?',options:["איטי","זריז","עייף","שקט"],correct:1,explain:'"זריז" פירושו מהיר.',hint:"מילה נרדפת = אותו פירוש."},
+{id:"w20",topic:"words",q:'מה ההפך מהמילה "לילה"?',options:["חושך","ערב","יום","חצות"],correct:2,explain:'ההפך מלילה הוא יום.',hint:"מתי יש אור בחוץ?"},
+{id:"w21",topic:"words",q:"חתול : מיאו = כלב : ___",options:["מיאו","האו","ציוץ","געייה"],correct:1,explain:"החתול עושה מיאו והכלב עושה האו.",hint:"איזה קול משמיע כלב?"},
+{id:"w22",topic:"words",q:"איזו מילה שונה מהאחרות? עט, עיפרון, מחברת, כדור",options:["עט","עיפרון","מחברת","כדור"],correct:3,explain:"הכדור לא כלי כתיבה לבית הספר.",hint:"שלוש שייכות לבית הספר. מה עושים בהפסקה?"},
+{id:"w23",topic:"words",q:"דבש : מתוק = לימון : ___",options:["מתוק","מלוח","חמוץ","חריף"],correct:2,explain:"הדבש מתוק והלימון חמוץ.",hint:"איזה טעם יש ללימון?"},
+{id:"w24",topic:"words",q:'קראי את הקטע ועני: "נס וסטילה בנו מגדל מ-6 קוביות אדומות ו-4 קוביות כחולות."<br>כמה קוביות יש במגדל בסך הכל?',options:["8","9","10","12"],correct:2,explain:"6+4=10.",hint:"'בסך הכל' אומר לחבר."},
+{id:"w25",topic:"words",q:'קראי את הקטע ועני: "נס וסטילה בנו מגדל מ-6 קוביות אדומות ו-4 קוביות כחולות."<br>לפי הקטע: כמה קוביות אדומות יש?',options:["4","5","6","10"],correct:2,explain:'כתוב במפורש: "6 קוביות אדומות".',hint:"התשובה כתובה בקטע — חפשי 'אדומות'."},
+{id:"w26",topic:"words",q:'איזו מילה נרדפת ל"גדול"?',options:["קטן","ענק","צר","קצר"],correct:1,explain:'"ענק" פירושו גדול מאוד.',hint:"איזו מילה מרגישה כמו גדול?"},
+{id:"w27",topic:"words",q:"סבתא : נכדה = סבא : ___",options:["נכד","בן","אח","אבא"],correct:0,explain:"כמו שסבתא היא של הנכדה, סבא הוא של הנכד.",hint:"השלימי את הזוג."},
+{id:"w28",topic:"words",q:"איזו מילה שונה מהאחרות? שולחן, כיסא, ארון, חתול",options:["שולחן","כיסא","ארון","חתול"],correct:3,explain:"החתול הוא בעל חיים, וכל השאר רהיטים.",hint:"שלוש מהמילים נמצאות בחדר."},
+{id:"w29",topic:"words",q:'מה ההפך מהמילה "שמח"?',options:["עליז","עצוב","נרגש","צוחק"],correct:1,explain:'ההפך משמח הוא עצוב.',hint:"כשלא שמחים — איך מרגישים?"},
+{id:"w30",topic:"words",q:"יד : כפפה = רגל : ___",options:["כובע","נעל","צעיף","חולצה"],correct:1,explain:"על היד שמים כפפה, ועל הרגל שמים נעל.",hint:"מה לובשים על הרגל?"},
+{id:"w31",topic:"words",q:'קראי את הקטע ועני: "בכיתה של נועה קירל יש 15 בנות ו-10 בנים."<br>כמה ילדים יש בכיתה בסך הכל?',options:["20","24","25","30"],correct:2,explain:"15+10=25.",hint:"חברי את שתי הקבוצות."},
+{id:"w32",topic:"words",q:'קראי את הקטע ועני: "בכיתה של נועה קירל יש 15 בנות ו-10 בנים."<br>לפי הקטע: כמה בנים יש בכיתה?',options:["10","15","20","25"],correct:0,explain:'כתוב במפורש: "10 בנים".',hint:"חפשי בקטע את המילה 'בנים'."},
+{id:"w33",topic:"words",q:'איזו מילה נרדפת ל"טוב"?',options:["רע","נפלא","קשה","עצוב"],correct:1,explain:'"נפלא" פירושו טוב מאוד.',hint:"פסלי את ההפך (רע) קודם."},
+{id:"w34",topic:"words",q:"חורף : קר = קיץ : ___",options:["קר","חם","גשם","שלג"],correct:1,explain:"בחורף קר ובקיץ חם.",hint:"איך מרגישים בקיץ?"},
+{id:"w35",topic:"words",q:"איזו מילה שונה מהאחרות? תפוז, לימון, אשכולית, תפוח אדמה",options:["תפוז","לימון","אשכולית","תפוח אדמה"],correct:3,explain:"תפוח האדמה הוא ירק, וכל השאר פירות הדר.",hint:"שלושה מהם סוחטים למיץ."},
+{id:"w36",topic:"words",q:'מה ההפך מהמילה "ישן"?',options:["עתיק","חדש","שבור","מלוכלך"],correct:1,explain:'ההפך מישן הוא חדש.',hint:"מה קונים בחנות?"},
+{id:"w37",topic:"words",q:"ציפור : כנפיים = דג : ___",options:["כנפיים","סנפירים","זנב","קשקשים"],correct:1,explain:"הציפור עפה עם כנפיים, והדג שוחה עם סנפירים.",hint:"במה הדג חותר במים?"},
+{id:"w38",topic:"words",q:'קראי את הקטע ועני: "סטטיק קרא 3 ספרים בחופש. כל ספר היה בן 20 עמודים."<br>כמה עמודים קרא סטטיק בסך הכל?',options:["23","40","60","80"],correct:2,explain:"3×20=60.",hint:"3 ספרים, 20 עמודים בכל אחד."},
+{id:"w39",topic:"words",q:'איזו מילה נרדפת ל"חכם"?',options:["טיפש","נבון","עצלן","שמח"],correct:1,explain:'"נבון" פירושו חכם.',hint:"פסלי את ההפך (טיפש) קודם."},
+{id:"w40",topic:"words",q:"עץ : יער = פרח : ___",options:["עלה","גינה","שורש","ענף"],correct:1,explain:"הרבה עצים ביחד הם יער, והרבה פרחים ביחד הם גינה.",hint:"איפה גדלים הרבה פרחים ביחד?"},
+{id:"w41",topic:"words",q:'השלימי את המשפט: "בחוץ יורד ___ חזק, לכן לקחנו ___."',options:["גשם / מטרייה","שמש / מטרייה","גשם / משקפי שמש","שלג / בגד ים"],correct:0,explain:"כשיורד גשם לוקחים מטרייה.",hint:"מה לוקחים כשיש גשם בחוץ?"},
+{id:"w42",topic:"words",q:'השלימי את המשפט: "הספר היה ___, לכן אנה זק לא הצליחה ___ אותו מהידיים."',options:["משעמם / להניח","מרתק / להניח","מרתק / לזרוק","ישן / לקרוא"],correct:1,explain:"ספר מרתק לא מניחים מהידיים.",hint:"מתי אי אפשר להניח ספר מהידיים?"},
+{id:"w43",topic:"words",q:'השלימי את המשפט: "נועה קירל שרה ___, ולכן הקהל ___ במחיאות כפיים."',options:["נפלא / פרץ","גרוע / פרץ","נפלא / נרדם","בשקט / פרץ"],correct:0,explain:"כשהשירה נפלאה הקהל פורץ במחיאות כפיים.",hint:"מתי קהל מוחא כפיים?"},
+/* ===== תוספת: עוד 22 שאלות לוגיקה ===== */
+{id:"l19",topic:"logic",q:"לאגם בוחבוט היו 7 מדבקות. היא קיבלה עוד 5 מדבקות. כמה מדבקות יש לה עכשיו?",options:["10","11","12","13"],correct:2,explain:"7+5=12.",hint:"'קיבלה עוד' אומר שמחברים."},
+{id:"l20",topic:"logic",q:"היו 20 בלונים. 6 בלונים התפוצצו. כמה בלונים נשארו?",options:["12","13","14","16"],correct:2,explain:"20−6=14.",hint:"'התפוצצו' אומר שמחסרים."},
+{id:"l21",topic:"logic",q:"4 חברים באו למסיבה. כל אחד קיבל 3 סוכריות. כמה סוכריות חולקו בסך הכל?",options:["7","10","12","14"],correct:2,explain:"4×3=12.",hint:"4 פעמים 3: 3+3+3+3."},
+{id:"l22",topic:"logic",q:"אמא אפתה 24 עוגיות וחילקה שווה בשווה בין 6 ילדים. כמה קיבל כל ילד?",options:["3","4","5","6"],correct:1,explain:"24 לחלק ל-6 שווה 4.",hint:"איזה מספר כפול 6 נותן 24?"},
+{id:"l23",topic:"logic",q:"אנה זק בת 7 ואחיה בן 10. בכמה שנים הוא גדול ממנה?",options:["2","3","4","17"],correct:1,explain:"10−7=3.",hint:"הגדול פחות הקטן."},
+{id:"l24",topic:"logic",q:"אם היום יום רביעי, איזה יום יהיה מחרתיים?",options:["חמישי","שישי","שבת","ראשון"],correct:1,explain:"מחר חמישי, מחרתיים שישי.",hint:"מחר = חמישי. ויום אחריו?"},
+{id:"l25",topic:"logic",q:"אם אתמול היה יום ראשון, איזה יום יהיה מחר?",options:["שני","שלישי","רביעי","חמישי"],correct:1,explain:"אתמול ראשון אז היום שני, ומחר שלישי.",hint:"קודם גלי איזה יום היום."},
+{id:"l26",topic:"logic",q:"כל הציפורים בוקעות מביצים. התרנגולת היא ציפור. מה נכון לומר?",options:["התרנגולת בוקעת מביצה","התרנגולת לא בוקעת מביצה","התרנגולת היא דג","אי אפשר לדעת"],correct:0,explain:"הכלל חל על כל הציפורים.",hint:"החוק הכללי חל גם עליה."},
+{id:"l27",topic:"logic",q:"בשקית יש 5 תפוחים אדומים ו-5 תפוחים ירוקים. כמה תפוחים יש בשקית?",options:["5","9","10","25"],correct:2,explain:"5+5=10.",hint:"'בסך הכל' = לחבר."},
+{id:"l28",topic:"logic",q:"סטטיק קם ב-6:30 והאוטובוס מגיע ב-7:00. כמה דקות יש לו להתארגן?",options:["20 דקות","30 דקות","40 דקות","60 דקות"],correct:1,explain:"מ-6:30 עד 7:00 עוברות 30 דקות.",hint:"חצי שעה = 30 דקות."},
+{id:"l29",topic:"logic",q:"אלה לי להב גבוהה מאנה זק, ואנה זק גבוהה מאודיה. מי הנמוכה ביותר?",options:["אלה לי להב","אנה זק","אודיה","אי אפשר לדעת"],correct:2,explain:"אודיה הכי נמוכה — אנה זק גבוהה ממנה ואלה לי להב גבוהה מאנה זק.",hint:"סדרי מהגבוהה לנמוכה — מי בסוף?"},
+{id:"l30",topic:"logic",q:"יש 3 קופסאות. בכל קופסה 4 עפרונות. כמה עפרונות יש בסך הכל?",options:["7","9","12","16"],correct:2,explain:"3×4=12.",hint:"3 פעמים 4: 4+4+4."},
+{id:"l31",topic:"logic",q:"ספר בן 50 עמודים. אגם בוחבוט קראה 20 עמודים. כמה עמודים נשארו לה?",options:["20","25","30","70"],correct:2,explain:"50−20=30.",hint:"'נשארו' אומר שמחסרים."},
+{id:"l32",topic:"logic",q:"סטטיק קנה 2 מחברות. כל מחברת עולה 5 שקלים. כמה הוא שילם?",options:["7 שקלים","9 שקלים","10 שקלים","12 שקלים"],correct:2,explain:"2×5=10 שקלים.",hint:"פעמיים 5."},
+{id:"l33",topic:"logic",q:"כל החתולים אוהבים חלב. מיצי היא חתולה. מה נכון לומר?",options:["מיצי אוהבת חלב","מיצי לא אוהבת חלב","מיצי היא כלבה","אי אפשר לדעת"],correct:0,explain:"הכלל חל על כל החתולים.",hint:"החוק הכללי חל גם עליה."},
+{id:"l34",topic:"logic",q:"נועה קירל חסכה 15 שקלים והוציאה 6 שקלים. כמה שקלים נשארו לה?",options:["6","8","9","21"],correct:2,explain:"15−6=9.",hint:"'הוציאה' אומר שמחסרים."},
+{id:"l35",topic:"logic",q:"בכיתה יש 9 בנים ו-11 בנות. כמה ילדים יש בכיתה?",options:["18","19","20","22"],correct:2,explain:"9+11=20.",hint:"חברי את שתי הקבוצות."},
+{id:"l36",topic:"logic",q:"אנה זק בת 9. בת כמה תהיה בעוד 4 שנים?",options:["11","12","13","15"],correct:2,explain:"9+4=13.",hint:"'בעוד' אומר שמוסיפים."},
+{id:"l37",topic:"logic",q:"2 אמהות ו-3 ילדים הלכו לפיקניק. כמה אנשים הלכו בסך הכל?",options:["4","5","6","7"],correct:1,explain:"2+3=5.",hint:"חברי את כולם."},
+{id:"l38",topic:"logic",q:"אודיה אפתה 18 לחמניות ונתנה 9 לשכנה. כמה לחמניות נשארו לה?",options:["6","9","12","27"],correct:1,explain:"18−9=9.",hint:"'נתנה' אומר שמחסרים."},
+{id:"l39",topic:"logic",q:"אם היום יום שישי, איזה יום היה לפני יומיים?",options:["שלישי","רביעי","חמישי","שבת"],correct:1,explain:"אתמול חמישי, לפני יומיים רביעי.",hint:"לכי אחורה: אתמול, ועוד יום אחורה."},
+{id:"l40",topic:"logic",q:"כל הדגים שוחים. נמו הוא דג. מה נכון לומר?",options:["נמו שוחה","נמו עף","נמו לא זז","אי אפשר לדעת"],correct:0,explain:"הכלל חל על כל הדגים.",hint:"החוק הכללי חל גם עליו."},
+{id:"l41",topic:"logic",q:"לחולצה אחת צריך 3 כפתורים. כמה כפתורים צריך ל-5 חולצות?",options:["8","12","15","18"],correct:2,explain:"5×3=15.",hint:"5 פעמים 3."},
+{id:"l42",topic:"logic",q:"כל ילד קיבל 2 מדבקות. בסך הכל חולקו 14 מדבקות. לכמה ילדים חולקו מדבקות?",options:["5","6","7","8"],correct:2,explain:"14 לחלק ל-2 שווה 7.",hint:"איזה מספר כפול 2 נותן 14?"}];
+
+/* ====== לוגיקת המשחק ====== */
+const $=id=>document.getElementById(id);
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+/* כל נתוני המשחק נשמרים ב-localStorage על המכשיר הזה — מתאפשר מעקב לאורך זמן */
+const store={
+  load(){try{return JSON.parse(localStorage.getItem("giftedQuizV1"))||{}}catch(e){return{}}},
+  save(d){try{localStorage.setItem("giftedQuizV1",JSON.stringify(d))}catch(e){}}
+};
+let DB=Object.assign({tests:0,bank:[],stars:{},history:[],seen:{}},store.load());
+const saveDB=()=>store.save(DB);
+let S=null;
+function show(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));$(id).classList.add("active");window.scrollTo(0,0);}
+function addToBank(q,why){
+  if(!DB.bank.find(b=>b.qid===q.id))DB.bank.push({qid:q.id,topic:q.topic,why});
+  if(DB.bank.length>60)DB.bank=DB.bank.slice(-60);
+}
+/* --- מסך פתיחה --- */
+document.querySelectorAll(".mode-card").forEach(c=>c.addEventListener("click",()=>{
+  document.querySelectorAll(".mode-card").forEach(x=>x.classList.remove("sel"));c.classList.add("sel");
+}));
+function refreshDiffBtn(){
+  const open=DB.tests>=2&&DB.bank.length>0;
+  $("btn-difficulties").classList.toggle("locked",!open);
+  $("diff-badge").textContent=open?`(${DB.bank.length})`:"🔒";
+  $("diff-note").style.display=open?"none":"block";
+}
+let pendingCfg=null,pendingRet="scr-welcome";
+function goPrep(cfg,ret){
+  pendingCfg=cfg;pendingRet=ret||"scr-welcome";
+  const n=cfg.mode==="full"?30:cfg.mode==="custom"?cfg.count:18;
+  const mins=cfg.mode==="full"?40:cfg.mode==="custom"?({10:15,15:20,20:30,30:40}[cfg.count]||20):20;
+  const label=cfg.mode==="full"?"מבחן מלא 🏁":cfg.mode==="custom"?("תרגול מותאם אישית 🎛 "+cfg.topics.map(t=>TOPICS[t].icon).join(" ")):("תרגול נושא: "+TOPICS[cfg.topic].icon+" "+TOPICS[cfg.topic].name);
+  const timerOn=$("tgl-timer").checked;
+  $("prep-info").innerHTML=`בחרת: <b>${label}</b><br>יש <b>${n} שאלות</b>${timerOn?` וטיימר של <b>${mins} דקות</b> ⏱️`:` — <b>בלי טיימר</b>, בקצב שלך 🙂`}<br>קראי איך משחקים — ואז יוצאים לדרך!`;
+  show("scr-prep");
+}
+$("btn-prep-go").onclick=()=>{if(pendingCfg)startQuiz(pendingCfg);};
+$("btn-prep-back").onclick=()=>show(pendingRet);
+$("btn-start").onclick=()=>{
+  const mode=document.querySelector(".mode-card.sel").dataset.mode;
+  if(mode==="topic"){buildTopics();show("scr-topics");}
+  else if(mode==="custom"){buildCustom();show("scr-custom");}
+  else goPrep({mode:"full"});
+};
+let customSel=new Set(["numbers","shapes","words","logic"]),customN=15;
+function buildCustom(){
+  const g=$("custom-topics");g.innerHTML="";
+  Object.keys(TOPICS).forEach(k=>{
+    const d=document.createElement("div");d.className="topic-card"+(customSel.has(k)?"":" off");
+    d.innerHTML=`<span class="em">${TOPICS[k].icon}</span><div class="t">${TOPICS[k].name}</div>`;
+    d.onclick=()=>{customSel.has(k)?customSel.delete(k):customSel.add(k);buildCustom();};
+    g.appendChild(d);
+  });
+  $("custom-warn").style.display="none";
+}
+document.querySelectorAll("#custom-counts .count-btn").forEach(b=>b.onclick=()=>{
+  customN=+b.dataset.n;
+  document.querySelectorAll("#custom-counts .count-btn").forEach(x=>x.classList.toggle("sel",x===b));
+});
+$("btn-custom-go").onclick=()=>{
+  if(customSel.size===0){$("custom-warn").style.display="block";return;}
+  goPrep({mode:"custom",topics:[...customSel],count:customN},"scr-custom");
+};
+$("btn-back-custom").onclick=()=>{show("scr-welcome");refreshDiffBtn();};
+$("btn-guide").onclick=()=>show("scr-guide");
+$("btn-difficulties").onclick=()=>{if(DB.tests>=2&&DB.bank.length>0)openReview();};
+$("btn-back-w1").onclick=()=>{show("scr-welcome");refreshDiffBtn();};
+$("btn-back-w2").onclick=()=>{show("scr-welcome");refreshDiffBtn();};
+function buildTopics(){
+  const g=$("topic-grid");g.innerHTML="";
+  Object.keys(TOPICS).forEach(k=>{
+    const st=DB.stars[k]||0;
+    const d=document.createElement("div");d.className="topic-card";
+    d.innerHTML=`<span class="em">${TOPICS[k].icon}</span><div class="t">${TOPICS[k].name}</div><div class="s">${"★".repeat(st)}${"☆".repeat(3-st)}</div>`;
+    d.onclick=()=>goPrep({mode:"topic",topic:k},"scr-topics");
+    g.appendChild(d);
+  });
+}
+/* --- התחלת משחק --- */
+function pickQuestions(pool,n){
+  const un=shuffle(pool.filter(q=>!(DB.seen[q.id]>0)));
+  const sn=shuffle(pool.filter(q=>DB.seen[q.id]>0));
+  return un.concat(sn).slice(0,n);
+}
+function startQuiz(cfg){
+  const name=($("inp-name").value||"").trim();
+  let qs,timerMin,partBreak=0;
+  if(cfg.mode==="review"){
+    qs=cfg.list.map(e=>QUESTIONS.find(q=>q.id===e.qid)).filter(Boolean);
+    qs=shuffle(qs);timerMin=0;
+  }else if(cfg.mode==="full"){
+    const p1=shuffle(pickQuestions(QUESTIONS.filter(q=>q.topic==="numbers"),8).concat(pickQuestions(QUESTIONS.filter(q=>q.topic==="shapes"),7)));
+    const p2=shuffle(pickQuestions(QUESTIONS.filter(q=>q.topic==="words"),8).concat(pickQuestions(QUESTIONS.filter(q=>q.topic==="logic"),7)));
+    qs=p1.concat(p2);partBreak=p1.length;timerMin=40;
+  }else if(cfg.mode==="custom"){
+    const ts=cfg.topics,per=Math.floor(cfg.count/ts.length);let rem=cfg.count%ts.length;
+    qs=[];ts.forEach(t=>{const c=per+(rem>0?1:0);if(rem>0)rem--;qs=qs.concat(pickQuestions(QUESTIONS.filter(q=>q.topic===t),c));});
+    qs=shuffle(qs);timerMin=({10:15,15:20,20:30,30:40}[cfg.count]||20);
+  }else{
+    qs=pickQuestions(QUESTIONS.filter(q=>q.topic===cfg.topic),18);timerMin=20;
+  }
+  if(!qs.length){alert("אין שאלות כרגע.");return;}
+  const timerOn=$("tgl-timer").checked&&timerMin>0;
+  S={name,cfg,qs,idx:0,correct:0,results:[],skipped:[],times:{},timeLeft:timerMin*60,timerTotal:timerMin*60,timerOn,partBreak,part2shown:false,
+     timerId:null,review:cfg.mode==="review",done:false,t0:Date.now()};
+  $("timer-wrap").style.display=timerOn?"block":"none";
+  quitArm=false;clearTimeout(quitTimer);const qb=$("btn-quit");if(qb){qb.textContent="🏠 ראשי";qb.classList.remove("armed");}
+  show("scr-quiz");renderQ();
+  if(timerOn){updateTimerUI();S.timerId=setInterval(()=>{
+    S.timeLeft--;
+    if(S.timeLeft<=0){S.timeLeft=0;updateTimerUI();onTimeUp();return;}
+    updateTimerUI();
+  },1000);}
+}
+function updateTimerUI(){
+  const m=Math.floor(S.timeLeft/60),s=S.timeLeft%60;
+  $("timer-text").textContent=m+":"+String(s).padStart(2,"0");
+  const total=S.timerTotal||((S.qs.length>20?40:20)*60),frac=Math.max(0,S.timeLeft/total),ring=$("timer-ring");
+  ring.style.strokeDashoffset=(163.3*(1-frac)).toFixed(1);
+  ring.style.stroke=frac>.5?"#2EC4B6":frac>.25?"#F5A623":"#E63946";
+}
+function onTimeUp(){
+  if(S.timerId)clearInterval(S.timerId);
+  for(let i=S.idx;i<S.qs.length;i++){const q=S.qs[i];S.results.push({qid:q.id,topic:q.topic,ok:false});addToBank(q,"time");}
+  S.idx=S.qs.length;finishQuiz(true);
+}
+/* --- שאלה --- */
+function renderQ(){
+  const q=S.qs[S.idx];
+  $("q-count").textContent=`שאלה ${S.idx+1} מתוך ${S.qs.length}`;
+  $("q-bar-fill").style.width=(S.idx/S.qs.length*100)+"%";
+  $("q-topic").textContent=`${TOPICS[q.topic].icon} ${TOPICS[q.topic].name}`;
+  $("q-text").innerHTML=q.q;
+  const box=$("answers");box.innerHTML="";
+  q.options.forEach((op,i)=>{
+    const b=document.createElement("button");b.className="ans";
+    b.innerHTML=`<span class="ltr-badge">${LETTERS[i]}</span><span>${op}</span>`;
+    b.onclick=()=>answer(i,b);box.appendChild(b);
+  });
+  $("hint-box").style.display="none";
+  const fb=$("feedback");fb.style.display="none";fb.className="";
+  $("guess-line").style.display="block";
+  S.qStart=Date.now();
+}
+function confettiBurst(el){
+  try{
+    const r=el.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
+    const colors=["#FF6B9D","#FF9A3D","#8B5CF6","#2EC4B6","#FFC93D","#34C759"];
+    for(let i=0;i<28;i++){
+      const d=document.createElement("div");d.className="confetti";
+      d.style.left=cx+"px";d.style.top=cy+"px";
+      d.style.background=colors[i%colors.length];
+      d.style.transform="translate("+((Math.random()-0.5)*170).toFixed(0)+"px,"+(-40-Math.random()*130).toFixed(0)+"px) rotate("+(Math.random()*360).toFixed(0)+"deg)";
+      document.body.appendChild(d);
+      setTimeout(()=>d.remove(),1250);
+    }
+  }catch(e){}
+}
+function answer(i,btn){
+  if(!S||S.done)return;
+  const q=S.qs[S.idx],dt=(Date.now()-S.qStart)/1000;
+  S.times[q.topic]=(S.times[q.topic]||0)+dt;
+  const btns=[...document.querySelectorAll("#answers .ans")];
+  btns.forEach(b=>b.disabled=true);
+  const ok=i===q.correct;
+  const qi=S.results.findIndex(r=>r.qid===q.id);
+  if(qi>=0){if(S.results[qi].ok)S.correct--;S.results.splice(qi,1);}
+  S.results.push({qid:q.id,topic:q.topic,ok});
+  if(ok){
+    S.correct++;btn.classList.add("correct");confettiBurst(btn);
+    btns.forEach((b,j)=>{if(j!==i)b.classList.add("dim");});
+    if(S.review)DB.bank=DB.bank.filter(b=>b.qid!==q.id);
+  }else{
+    btn.classList.add("wrong");btns[q.correct].classList.add("reveal");
+    btns.forEach((b,j)=>{if(j!==i&&j!==q.correct)b.classList.add("dim");});
+    addToBank(q,"wrong");
+  }
+  if(dt>90)addToBank(q,"slow");
+  saveDB();
+  const fb=$("feedback");fb.classList.add(ok?"good":"bad");
+  const greet=S.name?S.name+", ":"";
+  $("fb-title").textContent=ok?greet+pick(PRAISE):pick(COMFORT);
+  $("fb-text").innerHTML=(ok?"":"התשובה הנכונה מסומנת בירוק. ")+q.explain;
+  fb.style.display="block";$("guess-line").style.display="none";
+  $("btn-next").textContent=S.idx===S.qs.length-1?"לסיום 🏁":(S.partBreak&&S.idx===S.partBreak-1?"לחלק הבא 🎉":"לשאלה הבאה ←");
+}
+$("btn-next").onclick=()=>{
+  if(S.fromSkipped){S.fromSkipped=false;
+    if(S.skipped.length>0){renderSkipped();show("scr-skipped");}
+    else finishQuiz(false);
+    return;}
+  if(S.partBreak&&!S.fromSkipped&&!S.part2shown&&S.idx===S.partBreak-1){S.part2shown=true;show("scr-half");return;}
+  if(S.idx<S.qs.length-1){S.idx++;renderQ();}
+  else if(S.skipped.length>0){renderSkipped();show("scr-skipped");}
+  else finishQuiz(false);
+};
+$("btn-hint").onclick=()=>{
+  const q=S.qs[S.idx],hb=$("hint-box");
+  hb.innerHTML="<b>💡 איך ניגשים?</b><br>"+q.hint;
+  hb.style.display="block";
+};
+let quitArm=false,quitTimer=null;
+$("btn-quit").onclick=()=>{
+  const b=$("btn-quit");
+  if(!quitArm){
+    quitArm=true;b.textContent="בטוחה? לחצי שוב 🏠";b.classList.add("armed");
+    quitTimer=setTimeout(()=>{quitArm=false;b.textContent="🏠 ראשי";b.classList.remove("armed");},3000);
+    return;
+  }
+  clearTimeout(quitTimer);quitArm=false;
+  b.textContent="🏠 ראשי";b.classList.remove("armed");
+  if(S&&S.timerId)clearInterval(S.timerId);
+  show("scr-welcome");refreshDiffBtn();
+};
+$("btn-half-go").onclick=()=>{S.idx++;renderQ();show("scr-quiz");};
+$("btn-skip").onclick=()=>{
+  const q=S.qs[S.idx];
+  if(!S.skipped.find(s=>s.qid===q.id))S.skipped.push({qid:q.id,q});
+  addToBank(q,"skipped");saveDB();
+  $("btn-next").onclick();
+};
+/* --- שאלות שדולגו --- */
+function renderSkipped(){
+  const list=$("skipped-list");list.innerHTML="";
+  S.skipped.forEach((s,i)=>{
+    const d=document.createElement("div");d.className="skip-item";
+    const sp=document.createElement("span");sp.textContent=`${TOPICS[s.q.topic].icon} שאלה שדילגת (${i+1})`;
+    const b=document.createElement("button");b.className="btn btn-teal";
+    b.style.cssText="width:auto;margin:0;padding:10px 18px;font-size:15px;";
+    b.textContent="עני עכשיו ✏️";
+    b.onclick=()=>{S.idx=S.qs.findIndex(q=>q.id===s.qid);S.skipped=S.skipped.filter(x=>x.qid!==s.qid);S.fromSkipped=true;show("scr-quiz");renderQ();};
+    d.appendChild(sp);d.appendChild(b);list.appendChild(d);
+  });
+  updateSkipNote();
+}
+function updateSkipNote(){
+  $("skipped-note").textContent=S.skipped.length?`נשארו ${S.skipped.length} שאלות בלי מענה — חייבים לענות על כולן, גם בניחוש!`:"כל השאלות נענו! 🎉";
+}
+$("btn-to-summary").onclick=()=>{
+  if(S.skipped.length>0){updateSkipNote();$("skipped-note").style.color="#E63946";$("skipped-note").style.fontWeight="800";return;}
+  finishQuiz(false);
+};
+/* --- סיכום --- */
+function finishQuiz(timeUp){
+  if(S.timerId)clearInterval(S.timerId);
+  S.done=true;
+  const total=S.qs.length,ok=S.correct,pct=Math.round(ok/total*100);
+  const stars=pct>=90?3:pct>=70?2:pct>=40?1:0;
+  const per={};
+  S.results.forEach(r=>{per[r.topic]=per[r.topic]||{ok:0,total:0};per[r.topic].total++;if(r.ok)per[r.topic].ok++;});
+  Object.keys(per).forEach(k=>{
+    const p=Math.round(per[k].ok/per[k].total*100),s=p>=90?3:p>=70?2:p>=40?1:0;
+    DB.stars[k]=Math.max(DB.stars[k]||0,s);
+  });
+  if(!S.review&&S.cfg.mode==="full")DB.tests++;
+  S.qs.forEach(q=>{DB.seen[q.id]=(DB.seen[q.id]||0)+1;});
+  saveDB();
+  $("sum-mascot").textContent=stars===3?"🦉🎉":stars===2?"🦉🌟":"🦉💪";
+  $("sum-title").textContent=(S.name?S.name+", ":"")+(stars===3?"את אלופת החשיבה!":stars===2?"כל הכבוד גדול!":"ניסיון יפה, ממשיכים להתאמן!");
+  $("sum-stars").innerHTML=[0,1,2].map(i=>`<span class="${i<stars?"":"off"}">⭐</span>`).join("");
+  $("sum-score").textContent=ok;$("sum-total").textContent=total;
+  $("sum-msg").textContent=timeUp?"נגמר הזמן — וזה בסדר! במבחן האמיתי חשוב לשים לב לשעון ולנחש מהר בסוף.":"ענית על כל השאלות, כולל אלו שדילגת עליהן — בדיוק כמו אלופה!";
+  const box=$("sum-topics");box.innerHTML="";
+  Object.keys(TOPICS).forEach(k=>{
+    if(!per[k])return;
+    const p=Math.round(per[k].ok/per[k].total*100);
+    const d=document.createElement("div");d.className="topic-row";
+    d.innerHTML=`<span>${TOPICS[k].icon} ${TOPICS[k].name}</span><span class="ltr">${per[k].ok}/${per[k].total} · ${p}%</span>`;
+    box.appendChild(d);
+  });
+  const secs=Math.round((Date.now()-S.t0)/1000);
+  $("sum-time").textContent=`⏱️ זמן כולל: ${Math.floor(secs/60)}:${String(secs%60).padStart(2,"0")} דקות`;
+  DB.history.push({d:Date.now(),mode:S.review?"review":S.cfg.mode,topic:S.cfg.topic||null,topics:S.cfg.topics||null,total,ok,pct,secs,per});
+  if(DB.history.length>60)DB.history=DB.history.slice(-60);
+  saveDB();
+  show("scr-summary");refreshDiffBtn();
+}
+$("btn-again").onclick=()=>startQuiz(S.cfg);
+$("btn-diff2").onclick=()=>openReview();
+$("btn-topics2").onclick=()=>{buildTopics();show("scr-topics");};
+$("btn-home").onclick=()=>{show("scr-welcome");refreshDiffBtn();};
+$("btn-home2").onclick=()=>{show("scr-welcome");refreshDiffBtn();};
+/* --- חזרה על קשיים --- */
+const STRATEGIES={
+  numbers:{t:"🔢 דרך 3 הצעדים לסדרות",b:"<b>1.</b> בדקי את הקפיצה בין כל שני מספרים סמוכים.<br><b>2.</b> שאלי: הקפיצה קבועה? אם לא — אולי מכפילים או שהסדרה יורדת.<br><b>3.</b> המשיכי באותו חוק בדיוק."},
+  shapes:{t:"🔷 דרך 3 הצעדים לתבניות",b:"<b>1.</b> חפשי מה חוזר על עצמו.<br><b>2.</b> סמני את היחידה הקטנה ביותר שחוזרת (למשל: שניים ואחד).<br><b>3.</b> המשיכי את היחידה הזו."},
+  words:{t:"💬 דרך 3 הצעדים למילים",b:"<b>1.</b> זהי את הקשר: נרדף? הפך? שייכות לקבוצה?<br><b>2.</b> נסי כל תשובה בתוך המשפט.<br><b>3.</b> פסלי את מה שלא מתאים — מה שנשאר הוא התשובה."},
+  logic:{t:"🧩 דרך 3 הצעדים לבעיות",b:"<b>1.</b> סמני בראש את המספרים והעובדות החשובות.<br><b>2.</b> תרגמי למילים פשוטות: מחברים או מחסרים?<br><b>3.</b> בדקי כל תשובה — האם היא הגיונית?"}
+};
+function openReview(){
+  if(DB.tests<2){
+    const bd=$("rev-body");bd.innerHTML=`<div class="card center"><div class="mascot">🔒</div><div class="sub">אזור החזרה על קשיים ייפתח אחרי שתשלימי 2 מבחנים.<br>כל שאלה קשה תיאסף לכאן אוטומטית! 🦉</div></div>`;
+    show("scr-review");return;
+  }
+  const bank=DB.bank.slice(-24);
+  const body=$("rev-body");body.innerHTML="";
+  if(!bank.length){
+    body.innerHTML=`<div class="card center"><div class="mascot">🎉</div><div class="sub">אין שאלות קשות כרגע — את פשוט אלופה! המשיכי לשחק וכל שאלה קשה תיאסף לכאן אוטומטית.</div></div>`;
+    show("scr-review");return;
+  }
+  const byTopic={};
+  bank.forEach(e=>{(byTopic[e.topic]=byTopic[e.topic]||[]).push(e);});
+  Object.keys(byTopic).forEach(k=>{
+    const s=document.createElement("div");s.className="strategy";
+    s.innerHTML=`<b>${STRATEGIES[k].t}</b><br>${STRATEGIES[k].b}<br><span class="note">${byTopic[k].length} שאלות קשות בנושא הזה</span>`;
+    body.appendChild(s);
+  });
+  const b=document.createElement("button");b.className="btn btn-primary btn-big";
+  b.textContent=`בואי נתרגל את ה-${bank.length} הקשות! 💪`;
+  b.onclick=()=>startQuiz({mode:"review",list:bank});
+  body.appendChild(b);
+  show("scr-review");
+}
+/* --- דף מעקב להורים --- */
+function openParents(){
+  const h=DB.history||[];
+  $("par-tests").textContent=h.length;
+  $("par-avg").textContent=h.length?Math.round(h.reduce((a,e)=>a+e.pct,0)/h.length)+"%":"—";
+  $("par-best").textContent=h.length?Math.max(...h.map(e=>e.pct))+"%":"—";
+  $("par-time").textContent=h.length?Math.round(h.reduce((a,e)=>a+e.secs,0)/60)+" דקות":"—";
+  $("par-diff").textContent=(DB.bank||[]).length;
+  const agg={};
+  h.forEach(e=>{Object.keys(e.per||{}).forEach(k=>{agg[k]=agg[k]||{ok:0,total:0};agg[k].ok+=e.per[k].ok;agg[k].total+=e.per[k].total;});});
+  const box=$("par-topics");box.innerHTML="";
+  Object.keys(TOPICS).forEach(k=>{
+    const a=agg[k],p=a?Math.round(a.ok/a.total*100):null;
+    const st=DB.stars[k]||0;
+    const d=document.createElement("div");d.className="topic-row";
+    d.innerHTML=`<span>${TOPICS[k].icon} ${TOPICS[k].name} <span style="color:#F5A623">${"★".repeat(st)}${"☆".repeat(3-st)}</span></span><span class="ltr">${p===null?"—":p+"%"}</span>`;
+    box.appendChild(d);
+  });
+  const list=$("par-history");list.innerHTML=h.length?"":"<div class='note'>עוד לא הושלם שום תרגול.</div>";
+  h.slice(-10).reverse().forEach(e=>{
+    const dt=new Date(e.d);
+    const ds=dt.toLocaleDateString("he-IL",{day:"numeric",month:"numeric"})+" · "+dt.toLocaleTimeString("he-IL",{hour:"2-digit",minute:"2-digit"});
+    const label=e.mode==="full"?"מבחן מלא":e.mode==="custom"?"תרגול מותאם 🎛":e.mode==="topic"?(TOPICS[e.topic]?TOPICS[e.topic].name:"נושא"):"חזרה על קשיים";
+    const d=document.createElement("div");d.className="topic-row";
+    d.innerHTML=`<span>${ds} · ${label}</span><span class="ltr">${e.ok}/${e.total} · ${e.pct}%</span>`;
+    list.appendChild(d);
+  });
+  show("scr-parents");
+}
+$("btn-parents").onclick=openParents;
+$("btn-back-par").onclick=()=>{show("scr-welcome");refreshDiffBtn();};
+$("btn-reset").onclick=()=>{
+  if(confirm("למחוק את כל נתוני המעקב? אי אפשר לבטל את זה.")){
+    DB={tests:0,bank:[],stars:{},history:[],seen:{}};saveDB();openParents();refreshDiffBtn();
+  }
+};
+/* --- התחלה --- */
+refreshDiffBtn();
+</script>
+</body>
+</html>
