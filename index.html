@@ -684,10 +684,13 @@ function renderQ(){
   $("q-topic").textContent=`${TOPICS[q.topic].icon} ${TOPICS[q.topic].name}`;
   $("q-text").innerHTML=q.q;
   const box=$("answers");box.innerHTML="";
-  q.options.forEach((op,i)=>{
-    const b=document.createElement("button");b.className="ans";
-    b.innerHTML=`<span class="ltr-badge">${LETTERS[i]}</span><span>${op}</span>`;
-    b.onclick=()=>answer(i,b);box.appendChild(b);
+  /* סדר התשובות מעורבב פעם אחת לכל שאלה במבחן (ונשמר אם חוזרים אליה), כדי שלא יהיה "מיקום" שכדאי לנחש */
+  S.order=S.order||{};
+  const ord=S.order[q.id]=S.order[q.id]||shuffle([0,1,2,3]);
+  ord.forEach((orig,pos)=>{
+    const b=document.createElement("button");b.className="ans";b.dataset.orig=orig;
+    b.innerHTML=`<span class="ltr-badge">${LETTERS[pos]}</span><span>${q.options[orig]}</span>`;
+    b.onclick=()=>answer(orig,b);box.appendChild(b);
   });
   $("hint-box").style.display="none";
   const fb=$("feedback");fb.style.display="none";fb.className="";
@@ -720,11 +723,12 @@ function answer(i,btn){
   S.results.push({qid:q.id,topic:q.topic,ok});
   if(ok){
     S.correct++;btn.classList.add("correct");confettiBurst(btn);
-    btns.forEach((b,j)=>{if(j!==i)b.classList.add("dim");});
+    btns.forEach(b=>{if(b!==btn)b.classList.add("dim");});
     if(S.review)DB.bank=DB.bank.filter(b=>b.qid!==q.id);
   }else{
-    btn.classList.add("wrong");btns[q.correct].classList.add("reveal");
-    btns.forEach((b,j)=>{if(j!==i&&j!==q.correct)b.classList.add("dim");});
+    const right=btns.find(b=>Number(b.dataset.orig)===q.correct);
+    btn.classList.add("wrong");right.classList.add("reveal");
+    btns.forEach(b=>{if(b!==btn&&b!==right)b.classList.add("dim");});
     addToBank(q,"wrong");
   }
   if(dt>90)addToBank(q,"slow");
